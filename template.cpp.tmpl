@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+#define fi(a, b) for(int i=((int)(a)); i < ((int)(b)); i++)
+#define fj(a, b) for(int j=((int)(a)); j < ((int)(b)); j++)
+#define fk(a, b) for(int k=((int)(a)); k < ((int)(b)); k++)
+#define fori(a) for(int i=((int)(0)); i < ((int)(a.size())); i++)
+#define forj(a) for(int j=((int)(0)); j < ((int)(a.size())); j++)
+#define all(v)            (v).begin(),(v).end()
+#define isin(a,b)        find(all(a),(b))!=(a).end()
+#define isnotin(a,b)        find(all(a),(b))==(a).end()
+#define print(v) copy(all(v), ostream_iterator<int>(cout, ","));
+#define len(v)   (v).size()
+
+#define MAXTOP 10000000 //this is the biggest topcoder can do
+
+typedef vector<int> vi;
+typedef unsigned long long ull;
+
+//#define MAXN 100
+//int dp[MAXN][MAXN][MAXN][MAXN];
+//memset(dp, -1, sizeof(dp));
+
+struct ${ClassName}
+{
+${<foreach Method.Params p}
+    ${p.Type} ${p.Name}; 
+${<end}
+    ${Method.ReturnType} ${Method.Name}(${Method.Params})
+    {
+${<foreach Method.Params p}
+        this->${p.Name} = ${p.Name}; 
+${<end}
+        return ${Method.ReturnType;ZeroValue};
+    }
+};
+
+${CutBegin}
+${<TestCode}
+${CutEnd}
+
