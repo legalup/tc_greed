@@ -108,6 +108,12 @@ typedef deque<int> di;
 typedef vector<int> vi;
 typedef unsigned long long ull;
 
+template <class T>
+void printv(vector<T> v)
+{
+  copy(all(v),ostream_iterator<T>(cout,","));
+}
+
 //#define MAXN 100
 //int dp[MAXN][MAXN][MAXN][MAXN];
 //memset(dp, -1, sizeof(dp));
