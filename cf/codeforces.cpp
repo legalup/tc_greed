@@ -112,21 +112,8 @@ void printv(vector<T> v)
 //int dp[MAXN][MAXN][MAXN][MAXN];
 //memset(dp, -1, sizeof(dp));
 
-struct ${ClassName}
+int
+main(int argc, char**argv)
 {
-${<foreach Method.Params p}
-    ${p.Type} ${p.Name}; 
-${<end}
-    ${Method.ReturnType} ${Method.Name}(${Method.Params})
-    {
-${<foreach Method.Params p}
-        this->${p.Name} = ${p.Name}; 
-${<end}
-        return ${Method.ReturnType;ZeroValue};
-    }
-};
 
-${CutBegin}
-${<TestCode}
-${CutEnd}
-
+}
