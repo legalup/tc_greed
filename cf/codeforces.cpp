@@ -100,12 +100,13 @@ using namespace std;
 
 typedef deque<int> di;
 typedef vector<int> vi;
+typedef set<int> si;
 typedef unsigned long long ull;
 
 template <class T>
 void printv(vector<T> v)
 {
-  copy(all(v),ostream_iterator<T>(cout,","));
+  copy(a2z(v),ostream_iterator<T>(cout,","));
 }
 
 //#define MAXN 100
@@ -116,4 +117,6 @@ int
 main(int argc, char**argv)
 {
 
+  ios_base::sync_with_stdio(false); cout.setf(ios::fixed); cout.precision(20);
+  
 }
