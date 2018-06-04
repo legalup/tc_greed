@@ -92,8 +92,8 @@ using namespace std;
 #define fori(a) for(int i=((int)(0)); i < ((int)(a.size())); i++)
 #define forj(a) for(int j=((int)(0)); j < ((int)(a.size())); j++)
 #define a2z(v)            (v).begin(),(v).end()
-#define isin(b,a)        find(all(a),(b))!=(a).end()
-#define isnotin(b,a)        find(all(a),(b))==(a).end()
+#define isin(b,a)        find(a2z(a),(b))!=(a).end()
+#define isnotin(b,a)        find(a2z(a),(b))==(a).end()
 #define len(v)   (v).size()
 
 #define MAXTOP 10000000 //this is the biggest topcoder can do
