@@ -92,15 +92,17 @@ using namespace std;
 #define fori(a) for(int i=((int)(0)); i < ((int)(a.size())); i++)
 #define forj(a) for(int j=((int)(0)); j < ((int)(a.size())); j++)
 #define a2z(v)            (v).begin(),(v).end()
-#define isin(b,a)        find(a2z(a),(b))!=(a).end()
-#define isnotin(b,a)        find(a2z(a),(b))==(a).end()
+#define isin(b,a)         (a).count((b))>0
+#define isnotin(b,a)      (a).count((b))==0
 #define len(v)   (v).size()
 
 #define MAXTOP 10000000 //this is the biggest topcoder can do
 
 typedef deque<int> di;
 typedef vector<int> vi;
+typedef set<int> si;
 typedef unsigned long long ull;
+typedef bitset<50> bits;
 
 template <class T>
 void printv(vector<T> v)
