@@ -26,12 +26,12 @@
 
 namespace std
 {
-	std::ostream& operator<<(std::ostream& strm,
-                             const std::pair<int,int>& kvPair)
-	{
-		strm << "(" << kvPair.first << "," << kvPair.second << ")";
-		return strm;
-	}
+  std::ostream& operator<<(std::ostream& strm,
+                           const std::pair<int,int>& kvPair)
+    {
+      strm << "(" << kvPair.first << "," << kvPair.second << ")";
+      return strm;
+    }
 }
 
 
@@ -70,14 +70,57 @@ inline ull factorial(ull n) {
 }
 
 
+class coord
+{
+ public:
+  int idx;
+  int r;
+  int c;
+    
+  coord(int r, int c)
+    {
+      this->r = r;
+      this->c = c;
+      idx = r*cs+c;
+    }
+
+  coord(int iidx)
+    {
+      idx = iidx;
+      c = iidx % cs;
+      r = (iidx-c)/cs;
+    }
+
+  bool operator<(const coord & other) const
+  {
+    return idx<other.idx;
+  }
+
+  bool operator==(const coord & other) const
+  {
+    return r == other.r && c==other.c;
+  }
+
+  vector<coord> get_nbrs()
+    {
+      vector<coord> nbrs;
+      if(r>0) nbrs.push_back(coord(r-1,c));
+      if(c>0) nbrs.push_back(coord(r,c-1));
+      if(r<rs-1) nbrs.push_back(coord(r+1,c));
+      if(c<cs-1) nbrs.push_back(coord(r,c+1));
+
+      return nbrs;
+    }
+};
+  
 
 
 vector<uint64_t>   masks(64,0), steps(64,0);
 
 void prep()
 {
-	fi(0,masks.size()) masks[i] = 1LL << i; //masks[0]=1;
-	fi(1,64) steps[64-i-1]=0xFFFFFFFFFFFFFFFFLL >> i; //these are step functions. steps[0]=1;
+  fi(0,masks.size()) masks[i] = 1LL << i; //masks[0]=1;
+  fi(1,64) steps[64-i-1]=0xFFFFFFFFFFFFFFFFLL >> i; //these are step functions. steps[0]=1;
 }
 
 struct ltstr
@@ -246,13 +289,13 @@ void combination_noreps(const vi &  nums, uint64_t occ, vi nunums)
   if(occ) idx = 64-__builtin_clzll(occ); 
 
   fi(idx,nums.size())
-  {
-    if(((1LL << i) & occ) == 0)
     {
-        nunums[__builtin_popcountll(occ)]=nums[i];
-        combination_noreps(nums,(occ | (1LL << i)),nunums);
+      if(((1LL << i) & occ) == 0)
+        {
+          nunums[__builtin_popcountll(occ)]=nums[i];
+          combination_noreps(nums,(occ | (1LL << i)),nunums);
+        }
     }
-  }
 }
 
 //combination on a set of integers, indexed by a mask 
@@ -267,10 +310,10 @@ void combination_noreps(const uint64_t &  nums, int subset_size,uint64_t occ,  i
 {
   if(__builtin_popcountll(occ) == subset_size)
     {
-    //here, you can do something useful.
-    //for example, if you wanted to find k partitions of n things where you can have a 0 partition,
-    //pick k-1 subsets of n+k-1 numbers, and use the chosen numbers as partitions, where
-    //if you pick 0, that means that first partition has size 0
+      //here, you can do something useful.
+      //for example, if you wanted to find k partitions of n things where you can have a 0 partition,
+      //pick k-1 subsets of n+k-1 numbers, and use the chosen numbers as partitions, where
+      //if you pick 0, that means that first partition has size 0
       tot_num++;
       return;
     }
@@ -307,19 +350,19 @@ void partitions(int n, vi partition, int pos, int sum)
 {
   
   if(pos==(partition.size()-1))
-  {
-    partition[pos]=n-sum;
+    {
+      partition[pos]=n-sum;
     
-    //do something
-    dbg_vi(partition);
-    return;
-  }
+      //do something
+      dbg_vi(partition);
+      return;
+    }
 
   for(int i=0; i<= n-sum; i++)
-  {
-    partition[pos]=i;
-    partitions(n, partition, pos+1,sum+i);
-  }
+    {
+      partition[pos]=i;
+      partitions(n, partition, pos+1,sum+i);
+    }
 }
 
 
@@ -359,81 +402,81 @@ long long VI2LL(vi vnum, int begin, int end)
 // the first i characters of s and the first j characters of t;
 // note that d has (m+1)x(n+1) values
 int LevenshteinDistance(const char* s1, int n, const char* s2, int m)
- {
+{
 
-   int d[n+1][m+1];
+  int d[n+1][m+1];
 
-   if(m == 0) return n;
+  if(m == 0) return n;
 
-   if(n == 0) return m;
+  if(n == 0) return m;
 
-   for(int i=0; i<= n; i++) d[i][0] = i;
-   for(int j=0;  j<=m; j++) d[0][j] = j;
+  for(int i=0; i<= n; i++) d[i][0] = i;
+  for(int j=0;  j<=m; j++) d[0][j] = j;
 
 
-   for(int j=1; j<= m; j++)
-     for(int i=1; i<=n; i++)
-    {
-      if(s1[i-1] == s2[j-1]) d[i][j] = d[i-1][ j-1];
-      else if(d[i-1][j] < d[i][j-1]) d[i][j] = d[i-1][j]+1;
-      else d[i][j] = d[i][j-1]+1;
-    };
+  for(int j=1; j<= m; j++)
+    for(int i=1; i<=n; i++)
+      {
+        if(s1[i-1] == s2[j-1]) d[i][j] = d[i-1][ j-1];
+        else if(d[i-1][j] < d[i][j-1]) d[i][j] = d[i-1][j]+1;
+        else d[i][j] = d[i][j-1]+1;
+      };
  
 
-   return d[n][m];
- }
+  return d[n][m];
+}
 
 //getting smallest string, using above algo
 string LDstr(const char* cs1, int n, const char* cs2, int m)
- {
-   vs rows(m+1);
-   vvs d(n+1,rows);
-   //vvs d[n+1][m+1];
-   string s1; s1.assign(cs1,n);
-   string s2; s2.assign(cs2,m);
+{
+  vs rows(m+1);
+  vvs d(n+1,rows);
+  //vvs d[n+1][m+1];
+  string s1; s1.assign(cs1,n);
+  string s2; s2.assign(cs2,m);
 
-   if(m == 0) return s1;
+  if(m == 0) return s1;
 
-   if(n == 0) return s2;
+  if(n == 0) return s2;
 
-   for(int i=1;  i<=n; i++) d[i][0].assign(cs1,i);
-   for(int j=1;  j<=m; j++) d[0][j].assign(cs2,j);
+  for(int i=1;  i<=n; i++) d[i][0].assign(cs1,i);
+  for(int j=1;  j<=m; j++) d[0][j].assign(cs2,j);
 
 
-   for(int j=1; j<= m; j++)
-     for(int i=1; i<=n; i++)
-    {
-      string & dij = d[i][j];
-      string & dijm = d[i][j-1];
-      string & dimj = d[i-1][j];
-      string & dimjm = d[i-1][j-1];
+  for(int j=1; j<= m; j++)
+    for(int i=1; i<=n; i++)
+      {
+        string & dij = d[i][j];
+        string & dijm = d[i][j-1];
+        string & dimj = d[i-1][j];
+        string & dimjm = d[i-1][j-1];
 
-      if(s1[i-1] == s2[j-1])
-        {
-          dij = dimjm;
-          dij.push_back(s1[i-1]);
-        }
-      else if(dijm.size() < dimj.size())
-        {
-          dij = dijm;
-          dij.push_back(s2[j-1]);
-        }
-      else if(dijm.size() > dimj.size())
-        {
-          dij  = dimj;
-          dij.push_back(s1[i-1]);
-        }
-      else
-        {
-          dij = dimjm;
-          dij.push_back(s1[i-1]);
-          dij.push_back(s2[j-1]);
-        }
-    };
+        if(s1[i-1] == s2[j-1])
+          {
+            dij = dimjm;
+            dij.push_back(s1[i-1]);
+          }
+        else if(dijm.size() < dimj.size())
+          {
+            dij = dijm;
+            dij.push_back(s2[j-1]);
+          }
+        else if(dijm.size() > dimj.size())
+          {
+            dij  = dimj;
+            dij.push_back(s1[i-1]);
+          }
+        else
+          {
+            dij = dimjm;
+            dij.push_back(s1[i-1]);
+            dij.push_back(s2[j-1]);
+          }
+      };
  
 
-   return d[n][m];
- }
+  return d[n][m];
+}
 
 class node_
 {
@@ -442,31 +485,31 @@ class node_
   int at;
 };
 
- class comp_
- {
+class comp_
+{
  public:
-   bool operator()(const node_ &leftNode, const node_ &rightNode) const 
-   {
-     if (leftNode.cost != rightNode.cost) return leftNode.cost < rightNode.cost;
-     if (leftNode.at != rightNode.at) return leftNode.at < rightNode.at;
-     return false;
-   }
- };
+  bool operator()(const node_ &leftNode, const node_ &rightNode) const 
+  {
+    if (leftNode.cost != rightNode.cost) return leftNode.cost < rightNode.cost;
+    if (leftNode.at != rightNode.at) return leftNode.at < rightNode.at;
+    return false;
+  }
+};
 
- void dijkstra(node_ start) 
- {
-   priority_queue<node_,vector<node_>,comp_> s;
-   s.push(start);
-   while (s.empty() == false) 
-     {
-       node_ top = s.top();
-       s.pop();
-       //mark top as visited;
-       //check for termination condition (have we reached the target node?)
-       //add all of top's unvisited neighbors to the stack.
+void dijkstra(node_ start) 
+{
+  priority_queue<node_,vector<node_>,comp_> s;
+  s.push(start);
+  while (s.empty() == false) 
+    {
+      node_ top = s.top();
+      s.pop();
+      //mark top as visited;
+      //check for termination condition (have we reached the target node?)
+      //add all of top's unvisited neighbors to the stack.
       
-     }
- }
+    }
+}
 
 //a string tokenizer?
 //splits on every character in theDelimiters
@@ -496,8 +539,8 @@ class node_
 //this does NOT clear theStringVector before pushing more tokens
 void
 split( vector<string> & theStringVector,  /* Altered/returned value */
-      const  string  & theString,
-      const  string & theDelimiters)
+       const  string  & theString,
+       const  string & theDelimiters)
 {
   assert(!theDelimiters.empty());
   char buffy[theString.size()];
@@ -601,9 +644,9 @@ bool onSegment(pii p, pii q, pii r)
 {
   if (x(q) <= max(x(p), x(r)) && x(q) >= min(x(p), x(r)) &&
       y(q) <= max(y(p), y(r)) && y(q) >= min(y(p), y(r)))
-       return true;
+    return true;
  
-    return false;
+  return false;
 }
  
 // To find orientation of ordered triplet (p, q, r).
@@ -613,14 +656,14 @@ bool onSegment(pii p, pii q, pii r)
 // 2 --> Counterclockwise
 int orientation(pii p, pii q, pii r)
 {
-    // See 10th slides from following link for derivation of the formula
-    // http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
+  // See 10th slides from following link for derivation of the formula
+  // http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
   int val = (y(q) - y(p)) * (x(r) - x(q)) -
     (x(q) - x(p)) * (y(r) - y(q));
  
-    if (val == 0) return 0;  // colinear
+  if (val == 0) return 0;  // colinear
  
-    return (val < 0)? 1: 2; // clock or counterclock wise
+  return (val < 0)? 1: 2; // clock or counterclock wise
 }
 
 // To find orientation of ordered triplet (p, q, r).
@@ -633,40 +676,40 @@ int orientation(int x1, int y1, int x2, int y2,int x3, int y3)
 
   int val = -x2*y3+x3*y2+x1*y3-x3*y1-x1*y2+x2*y1;
  
-    if (val == 0) return 0;  // colinear
+  if (val == 0) return 0;  // colinear
  
-    return (val > 0)? 1: 2; // clock or counterclock wise
+  return (val > 0)? 1: 2; // clock or counterclock wise
 }
 
 // The main function that returns true if line segment 'p1q1'
 // and 'p2q2' intersect.
 bool do_intersect(pii p1, pii q1, pii p2, pii q2)
 {
-    // Find the four orientations needed for general and
-    // special cases
-    int o1 = orientation(p1, q1, p2);
-    int o2 = orientation(p1, q1, q2);
-    int o3 = orientation(p2, q2, p1);
-    int o4 = orientation(p2, q2, q1);
+  // Find the four orientations needed for general and
+  // special cases
+  int o1 = orientation(p1, q1, p2);
+  int o2 = orientation(p1, q1, q2);
+  int o3 = orientation(p2, q2, p1);
+  int o4 = orientation(p2, q2, q1);
  
-    // General case
-    if (o1 != o2 && o3 != o4)
-        return true;
+  // General case
+  if (o1 != o2 && o3 != o4)
+    return true;
  
-    // Special Cases
-    // p1, q1 and p2 are colinear and p2 lies on segment p1q1
-    if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+  // Special Cases
+  // p1, q1 and p2 are colinear and p2 lies on segment p1q1
+  if (o1 == 0 && onSegment(p1, p2, q1)) return true;
  
-    // p1, q1 and p2 are colinear and q2 lies on segment p1q1
-    if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+  // p1, q1 and p2 are colinear and q2 lies on segment p1q1
+  if (o2 == 0 && onSegment(p1, q2, q1)) return true;
  
-    // p2, q2 and p1 are colinear and p1 lies on segment p2q2
-    if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+  // p2, q2 and p1 are colinear and p1 lies on segment p2q2
+  if (o3 == 0 && onSegment(p2, p1, q2)) return true;
  
-     // p2, q2 and q1 are colinear and q1 lies on segment p2q2
-    if (o4 == 0 && onSegment(p2, q1, q2)) return true;
+  // p2, q2 and q1 are colinear and q1 lies on segment p2q2
+  if (o4 == 0 && onSegment(p2, q1, q2)) return true;
  
-    return false; // Doesn't fall in any of the above cases
+  return false; // Doesn't fall in any of the above cases
 }
 
 //does the above, over a collection
