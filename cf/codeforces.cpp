@@ -98,10 +98,10 @@ using namespace std;
 
 #define MAXTOP 10000000 //this is the biggest topcoder can do
 
-typedef deque<int> di;
-typedef vector<int> vi;
-typedef set<int> si;
-typedef unsigned long long ull;
+using di=deque<int>;
+using vi=vector<int>;
+using si=set<int>;
+using ull=unsigned long long;
 
 template <class T>
 void printv(vector<T> v)
@@ -112,6 +112,16 @@ void printv(vector<T> v)
 //#define MAXN 100
 //int dp[MAXN][MAXN][MAXN][MAXN];
 //memset(dp, -1, sizeof(dp));
+
+class Acronyms
+{
+  
+ public:
+   string acronize(vector <string> document)
+  {
+
+  };
+};
 
 int
 main(int argc, char**argv)
