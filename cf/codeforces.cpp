@@ -49,57 +49,6 @@ void printv(vector<T> v)
 
 
 
-class  ABCPath{
-  int dp[MAXN][MAXN];
-  vector<string> mygrid;
-  
-  int find_longest(int row, int col)
-  {
-    if(dp[row][col] >=0) return dp[row][col];
-    char ch = mygrid[row][col];
-    vector<pii> nbrs;
-    int numrows = mygrid.size();
-    int numcols = mygrid[0].size();
-    for(int r=row-1; r<=row+1; r++)
-      for(int c=col-1; c<=col+1; c++){
-        if(r==row && c==col) continue;
-        if(c>=0 && c<numcols && r>=0 && r<numrows){
-          char nxtch = mygrid[r][c];
-          if(nxtch-ch == 1) nbrs.push_back(make_pair(r,c));
-        }
-      }
-
-    priority_queue<int> lengths;
-    for(auto pr : nbrs){
-      lengths.push(find_longest(pr.first,pr.second));
-    };
-    
-    int longest(0);
-    if(!lengths.empty()) longest = lengths.top()+1;
-    dp[row][col] = longest;
-    return longest;
-  };
-  
- public:
-  
-  int length(vector <string> grid)
-  {
-    memset(dp, -1, sizeof(dp));
-    mygrid = grid;
-    priority_queue<int> pq;
-
-    int nrs = grid.size();
-    int ncs = grid[0].size();
-    for(int r=0; r<nrs; r++)
-      for(int c=0; c<ncs; c++)
-        if(grid[r][c]=='A') pq.push(find_longest(r,c));
-
-    if(pq.empty()) return 0;
-    return pq.top()+1;
-  }
-};
-
-
 // int
 // main(int argc, char**argv)
 // {
