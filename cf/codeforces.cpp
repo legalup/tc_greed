@@ -14,7 +14,8 @@
 #include <algorithm>
 #include <bitset>
 #include <numeric>
-
+#include <map>
+#include <unordered_map>
 
 using namespace std;
 
@@ -29,36 +30,52 @@ using namespace std;
 #define isnotin(b,a)        find(all(a),(b))==(a).end()
 #define len(v)   (v).size()
 
-#define MAXTOP 10000000 //this is the biggest topcoder can do
-
-using di=deque<int>;
-using vi=vector<int>;
-using si=set<int>;
-using ull=unsigned long long;
-using pii=pair<int,int>;
 
 
-template <class T>
-void printv(vector<T> v)
+vector<int> biggest_sub(vector<int> as)
 {
-  copy(a2z(v),ostream_iterator<T>(cout,","));
-}
-
-#define MAXN 50
-
-
-
-
-// int
-// main(int argc, char**argv)
-// {
-
-//   ios_base::sync_with_stdio(false); cout.setf(ios::fixed); cout.precision(20);
-//   string str = "abc";
-
-//   int sz = str.size();
-//   cout << "the last char of str is:" << str[sz-1] << endl;
-    
+  vector<int> ret;
+  return ret;
   
-// }
+};
+
+template<typename T>
+void run(T & cc){
+
+  int t;
+  cc >> t;
+  int n;
+
+  for(int i=0; i<t; i++){
+    cc >> n;
+    vector<int> as;
+    for(int j=0; j<n; j++){
+      int a;
+      cc >> a;
+      as.push_back(a);
+    }
+
+    vector<int> ret = biggest_sub(as);
+    cout << ret.size() << endl;
+    for(auto ii : ret) cout << ii << " ";
+    cout << endl;
+  }
+  
+}
+ int
+ main(int argc, char**argv)
+ {
+
+   ios_base::sync_with_stdio(false); cout.setf(ios::fixed); cout.precision(20);
+   
+   //#define TEST
+
+   #ifdef TEST
+   ifstream myfile ("data.txt");
+   run(myfile);
+   #else
+   run(cin);
+   #endif
+  
+ }
  
