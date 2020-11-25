@@ -70,50 +70,6 @@ inline ull factorial(ull n) {
 }
 
 
-class coord
-{
- public:
-  int idx;
-  int r;
-  int c;
-    
-  coord(int r, int c)
-    {
-      this->r = r;
-      this->c = c;
-      idx = r*cs+c;
-    }
-
-  coord(int iidx)
-    {
-      idx = iidx;
-      c = iidx % cs;
-      r = (iidx-c)/cs;
-    }
-
-  bool operator<(const coord & other) const
-  {
-    return idx<other.idx;
-  }
-
-  bool operator==(const coord & other) const
-  {
-    return r == other.r && c==other.c;
-  }
-
-  vector<coord> get_nbrs()
-    {
-      vector<coord> nbrs;
-      if(r>0) nbrs.push_back(coord(r-1,c));
-      if(c>0) nbrs.push_back(coord(r,c-1));
-      if(r<rs-1) nbrs.push_back(coord(r+1,c));
-      if(c<cs-1) nbrs.push_back(coord(r,c+1));
-
-      return nbrs;
-    }
-};
-  
-
 
 vector<uint64_t>   masks(64,0), steps(64,0);
 
@@ -366,25 +322,56 @@ void partitions(int n, vi partition, int pos, int sum)
 }
 
 
-
-//this computes primes up to N
-//is stored in primes
-vi primes;
-void compute_primes( int N)
+template<typename T>
+class primer
 {
-  vi num(N,0);
-  primes.push_back(2);
-  for(int i=0; i<N; i += 2) num[i] = 1;
-  int np(2);
-  while(np < N)
-    {
-      while(num[np]>0 && np<N) np++;
-      if(np == N) return;
-      primes.push_back(np);
-      for(int i=0; i<N; i += np) num[i] = 1;
-    }
-};
+public:
 
+  primer(int maxn=10000): MAX(maxn)
+  {
+    SPF.resize(MAX);
+    sieve(MAX);
+  }
+  
+  const T MAX;
+
+  vector<T> SPF;
+  vector<T> primes;
+
+  // make sure that MAX is at least sqrt n
+  void sieve(T n) {
+    vector<bool> isPrime(n+1, true);
+    isPrime[1] = false;
+    for (T i=2; i<=n; i++) {
+      // assert isPrime == True
+      if (!isPrime[i]) continue;
+      /* j*(i-1) has a factor of (i-1) and was covered before
+	 Therefore start from i*i */
+      SPF[i] = i;
+      primes.push_back(i);
+      for (T j=i*i; j<=n; j+=i)
+	if (isPrime[j]){
+	  isPrime[j] = false;
+	  SPF[j] = i;
+	}
+    }
+  }
+
+
+  //here, make sure primes are checked for at least square root of n
+  map<T,T> optimized_trial_division(T n) {
+    map<T, T> pf;
+    for (auto p : primes) {
+      if (p*p > n) break;
+      int count = 0;
+      while (n%p==0) ++count, n/=p;
+      if (count) pf[p]= count;
+    }
+    if (n>1) pf[n]= 1;
+    return pf;
+
+  }
+};
 
 
 
