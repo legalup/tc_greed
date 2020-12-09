@@ -34,6 +34,37 @@ namespace std
     }
 }
 
+///////////////////////////////////////////////////////
+// extending priority_queue to implement 'remove'
+// super useful in two heaps type problems
+////////////////////////////////////////////////////
+template <typename T, class Container = vector<T>,
+          class Compare = less<typename Container::value_type>>
+class priority_queue_with_remove : public priority_queue<T, Container, Compare> {
+ public:
+  bool remove(const T &valueToRemove) {
+    auto itr = std::find(this->c.begin(), this->c.end(), valueToRemove);
+    if (itr == this->c.end()) {
+      return false;
+    }
+    this->c.erase(itr);
+    // ideally we should not be rebuilding the heap as we are removing only one element
+    // a custom implementation of priority queue can adjust only one element in O(logN)
+    std::make_heap(this->c.begin(), this->c.end(), this->comp);
+    return true;
+  }
+};
+
+//and here is a comparator example
+struct lttype
+{
+    bool operator()(const tri & p1, const tri & p2)
+    {
+        return false;
+
+    }
+};
+
 
 
 //__builtin_ctz (count trailing zeros of an unsigned int) warning: undefined for 0.
