@@ -31,6 +31,9 @@ RUN apt-get update && \
 #install firefox
 RUN apt-get update && apt-get install -y firefox
 
+# making my favorite user
+RUN useradd -ms /bin/bash galup
+RUN apt-get update && apt-get install -y sudo  && adduser galup sudo
 
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000
@@ -43,6 +46,9 @@ RUN chown ${uid}:${gid} -R /home/developer
 
 USER developer
 ENV HOME /home/developer
+WORKDIR /home/galup
+
+
 
 
 
