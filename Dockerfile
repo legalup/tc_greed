@@ -58,7 +58,7 @@ ARG GITPASSWD=ByteMe
 RUN git clone https://legalup:"$GITPASSWD"@github.com/legalup/tc_greed.git
 
 
-
-#https://github.com/legalup/dotemacs.git
+WORKDIR /home/galup
+RUN wget https://github.com/shivawu/topcoder-greed/releases/download/2.0-RC/Greed-2.0-RC-7.1.0.jar
 
 
