@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install -qq --no-install-recommends \
         apt-transport-https \
         apt-utils \
 	git \
+	less \
+	findutils \
+	openssh-client \
+	locate \
 	python3.4 \
 	python3-pip
 
@@ -44,11 +48,17 @@ RUN echo "developer ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN chmod 0440 /etc/sudoers
 RUN chown ${uid}:${gid} -R /home/developer
 
-USER developer
-ENV HOME /home/developer
+USER galup
+ENV HOME /home/galup
+RUN mkdir -p /home/galup/workspace
+WORKDIR /home/galup/workspace
+
+# lets do some git cloning, shall we
+ARG GITPASSWD=ByteMe
+RUN git clone https://legalup:"$GITPASSWD"@github.com/legalup/tc_greed.git
+
+
 WORKDIR /home/galup
-
-
-
+RUN wget https://github.com/shivawu/topcoder-greed/releases/download/2.0-RC/Greed-2.0-RC-7.1.0.jar
 
 
