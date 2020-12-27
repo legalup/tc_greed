@@ -34,6 +34,45 @@ namespace std
     }
 }
 
+//////////////////////////////////////////////
+// disjoint union. great of finding cc of an image and min spanning sets
+//////////////////////////////////////////////////////////////
+
+    map<pii, pii> parent;
+
+//make sure you initialize this with everything in your set
+    void make_set(pii v) {
+        parent[v] = v;
+    }
+
+    //this feature has path compression 
+    pii find_set(pii v) {
+        if (v == parent[v])
+            return v;
+        return parent[v] = find_set(parent[v]);
+    }
+
+//this particular union set choose the parent that is the
+//smallest in dictionary ordering. theres many other ways to go here
+//especially to optimize for size & rank.
+    void union_sets(pii a, pii b) {
+        a = find_set(a);
+        b = find_set(b);
+        if (a != b) {
+            if(a.first==b.first){
+                if(a.second<b.second) parent[b]=a;
+                else parent[a]=b;
+            }
+            else {
+                if(a.first<b.first) parent[b] = a;
+                else parent[a]=b;
+            }
+
+        }
+    }
+
+
+
 ///////////////////////////////////////////////////////
 // extending priority_queue to implement 'remove'
 // super useful in two heaps type problems
