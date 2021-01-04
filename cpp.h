@@ -223,11 +223,11 @@ typedef pair< pss, string > tss;
 
 ull nchoosek(int n, int k)
 {
-  if(k==0) return 1;
-  if(n==0) return 0;
+  if(k==0) return 1LL;
+  if(n==0) return 0LL;
 
   vector<ull>  nk(n+1,0);
-  nk[0]=1;
+  nk[0]=1LL;
   for(int i=1; i<=n; i++) for(int j=i;j>=1;j--) nk[j] += nk[j-1];
 
   return nk[k];
