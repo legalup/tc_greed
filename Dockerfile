@@ -17,8 +17,15 @@ RUN apt-get update && apt-get install -qq --no-install-recommends \
 	findutils \
 	openssh-client \
 	locate \
+	cmake \
 	python3.4 \
 	python3-pip
+
+#installs g++ 
+RUN apt-get update && apt-get install -y build-essential
+
+#installs necessary for FlapHero
+RUN apt-get update && apt-get install -y libassimp-dev libglfw3-dev
 
 RUN apt-get install -y emacs
 
@@ -57,8 +64,20 @@ WORKDIR /home/galup/workspace
 ARG GITPASSWD=ByteMe
 RUN git clone https://legalup:"$GITPASSWD"@github.com/legalup/tc_greed.git
 
+# the following get plywood setup
+RUN git clone https://github.com/arc80/plywood
+WORKDIR /home/galup/workspace/plywood
+RUN cmake -DPRESET=make -P Setup.cmake
+WORKDIR /home/galup/workspace/plywood/repos
+RUN git clone https://github.com/arc80/FlapHero
+WORKDIR /home/galup/workspace/plywood
+RUN ./plytool codegen ; ./plytool build --auto glfwFlap ; ./plytool extern select --install assimp.apt ; \
+./plytool extern select --install soloud.source ; ./plytool extern select --install glfw.apt
+RUN ./plytool build --auto glfwFlap ; ./plytool build
+
 
 WORKDIR /home/galup
 RUN wget https://github.com/shivawu/topcoder-greed/releases/download/2.0-RC/Greed-2.0-RC-7.1.0.jar
+
 
 
