@@ -34,6 +34,45 @@ namespace std
     }
 }
 
+//////////////////////////////////////////////
+// disjoint union. great of finding cc of an image and min spanning sets
+//////////////////////////////////////////////////////////////
+
+    map<pii, pii> parent;
+
+//make sure you initialize this with everything in your set
+    void make_set(pii v) {
+        parent[v] = v;
+    }
+
+    //this feature has path compression 
+    pii find_set(pii v) {
+        if (v == parent[v])
+            return v;
+        return parent[v] = find_set(parent[v]);
+    }
+
+//this particular union set choose the parent that is the
+//smallest in dictionary ordering. theres many other ways to go here
+//especially to optimize for size & rank.
+    void union_sets(pii a, pii b) {
+        a = find_set(a);
+        b = find_set(b);
+        if (a != b) {
+            if(a.first==b.first){
+                if(a.second<b.second) parent[b]=a;
+                else parent[a]=b;
+            }
+            else {
+                if(a.first<b.first) parent[b] = a;
+                else parent[a]=b;
+            }
+
+        }
+    }
+
+
+
 ///////////////////////////////////////////////////////
 // extending priority_queue to implement 'remove'
 // super useful in two heaps type problems
@@ -184,11 +223,11 @@ typedef pair< pss, string > tss;
 
 ull nchoosek(int n, int k)
 {
-  if(k==0) return 1;
-  if(n==0) return 0;
+  if(k==0) return 1LL;
+  if(n==0) return 0LL;
 
   vector<ull>  nk(n+1,0);
-  nk[0]=1;
+  nk[0]=1LL;
   for(int i=1; i<=n; i++) for(int j=i;j>=1;j--) nk[j] += nk[j-1];
 
   return nk[k];
@@ -419,30 +458,38 @@ long long VI2LL(vi vnum, int begin, int end)
 // for all i and j, d[i,j] will hold the Levenshtein distance between
 // the first i characters of s and the first j characters of t;
 // note that d has (m+1)x(n+1) values
-int LevenshteinDistance(const char* s1, int n, const char* s2, int m)
+int LevenshteinDistance(const char* s, int m, const char* t, int n)
 {
+  // for all i and j, d[i,j] will hold the Levenshtein distance between
+  // the first i characters of s and the first j characters of t
+    int d[m+1][n+1];
+    memset(d,0,sizeof(d));
 
-  int d[n+1][m+1];
+    if(m == 0) return n;
 
-  if(m == 0) return n;
+    if(n == 0) return m;
 
-  if(n == 0) return m;
-
-  for(int i=0; i<= n; i++) d[i][0] = i;
-  for(int j=0;  j<=m; j++) d[0][j] = j;
+    for(int i=0; i<=m; i++) d[i][0] = i;
+    for(int j=0;  j<=n; j++) d[0][j] = j;
 
 
-  for(int j=1; j<= m; j++)
-    for(int i=1; i<=n; i++)
-      {
-        if(s1[i-1] == s2[j-1]) d[i][j] = d[i-1][ j-1];
-        else if(d[i-1][j] < d[i][j-1]) d[i][j] = d[i-1][j]+1;
-        else d[i][j] = d[i][j-1]+1;
-      };
- 
+    for(int j=1; j<=n; j++)
+        for(int i=1; i<=m; i++)
+        {
+            int substitution_cost(0);
+            if(s[i-1] != t[j-1]) substitution_cost = 1;
 
-  return d[n][m];
+            vi elems;
+            elems.push_back(d[i-1][j]+1);
+            elems.push_back(d[i][j-1]+1);
+            elems.push_back(d[i-1][j-1]+substitution_cost);
+            d[i][j] = *min_element(a2z(elems));
+        };
+
+
+    return d[m][n];
 }
+
 
 //getting smallest string, using above algo
 string LDstr(const char* cs1, int n, const char* cs2, int m)
