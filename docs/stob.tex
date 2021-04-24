@@ -1,0 +1,127 @@
+% A percent sign tells the LaTeX compiler to ignore whatever comes after it.
+% So you can use it to make comments in your .tex file.
+
+
+% We have to tell LaTeX what sort of document we're creating.
+% This will be an article, and we're using 11pt font (10 is too small, 12 is too big, imho).
+\documentclass[11pt]{amsart}
+
+% This next line forces the compiler to make pdf files. 
+\pdfoutput=1
+
+% Next we can include some packages with other features. 
+% I have added one that makes your document take up a full page.
+% The packages amsmath and amssymb give you a bunch of extra math symbols.
+\usepackage{fullpage}
+\usepackage{amsmath, amssymb, amsthm}
+
+
+% The following code defines a ``problem'' environment that I use for homeworks and exams.
+% Check out the examples below.
+\newtheorem{problem}{Problem}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+
+% You can also define your own macros to save on typing time.
+% The following macro allows me to type $\ZZ$ instead of 
+% $\mathbb{Z}$ in order to produce the symbol for the integers.
+\newcommand{\RR}{\mathbb{R}}
+
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+
+% These lines put a heading on the first page. 
+\title{Some thoughts on backprop}
+\author{Luis Galup}
+
+% If you don't include a date between the braces, it will simply print today's date.
+\date{}
+
+%%%%%%%%%%%%%%
+
+% Now we have to tell the compiler that the content of the article is beginning. 
+% We also have to tell it to make a title and add our author info.
+\begin{document}
+\maketitle
+
+In this paper I use einsteinian notation for tensor products.
+
+\begin{definition}[RELU]
+RELU $\Re \rightarrow \Re$ is a function where, for $x \in \Re$
+\[
+	RELU(x) = \max(0,x)
+\]
+\end{definition}
+
+The total input $x_j$ to unit $j$ is a linear function of the outputs, $y_i$, of the units that are connected to $j$ and of the weights $w_{ji}$, on these connections:
+\[
+	x_j = y^iw_{ji}
+\]
+
+Units can be given biases by introducing an extra input to each unit which has the value $1$. The weight on this extra input is called the bias and is equvaet to a threshold of the opposite sign. It can be treated just like other weights.
+
+A unit has a real valued out, $y_j$, which is a nonlinear function of its total input.
+\[
+	y_j = RELU(x_j)
+\]
+
+We define the residual error, E, as
+\[
+	E_{j,c} = y_{j,c} - d_{j,c}
+\]
+where $c$ is an index over input-output pairs, and j is an index over output units, and y is the actual stated of the an output unti and d is its desired state. 
+The total error $E$ is defined as the L2 norm of the residual,
+\[
+	E = \| E_{j,c} \|_2
+\]
+
+It is at this point that backpropagation is used to define to update the weights to minimize this. 
+
+Taking derivatives is a good idea when the derivatives are well defined and far from being singular. However, this is difficult to control and is subject to the torments of local minima.
+
+
+We introduce a new backpropagation technique which does not use derivatives, but instead uses quadratic programming. 
+
+The general quadratic program (QP) can be stated as 
+\begin{definition}
+\begin{align}
+\min_x q(x)  & =  x^T G x + x^Tc \\
+\hbox{where } a_i^Tx & = b_i, i \in E \\
+\hbox{and } a_i^T & \geq b_i, i \in I
+\end{align}
+\end{definition}
+
+%
+%\begin{theorem}[Pythagorean theorem]
+%\label{pythagorean}
+%This is a theorema about right triangles and can be summarised in the next 
+%equation 
+%\[ x^2 + y^2 = z^2 \]
+%\end{theorem}
+%
+%And a consequence of theorem \ref{pythagorean} is the statement in the next 
+%corollary.
+%
+%\begin{corollary}
+%There's no right rectangle whose sides measure 3cm, 4cm, and 6cm.
+%\end{corollary}
+%
+%You can reference theorems such as \ref{pythagorean} when a label is assigned.
+%
+%\begin{lemma}
+%Given two line segments whose lengths are $a$ and $b$ respectively there is a 
+%real number $r$ such that $b=ra$.
+%\end{lemma}
+%%
+
+
+% To tell the compiler when to stop working, you have to include the following line at the end.
+\end{document}
