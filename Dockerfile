@@ -29,15 +29,16 @@ RUN apt-get update && apt-get install -y libassimp-dev libglfw3-dev
 
 RUN apt-get install -y emacs
 
-# Install OpenJDK-8
-RUN apt-get update && \
-    apt-get install -y openjdk-8-jre-headless && \
-    apt-get clean;
+
+   
+#RUN apt-get update && \
+#    apt-get install -y openjdk-8-jre-headless && \
+#    apt-get clean;
 
 # Install the plugin for javaws
 # deb http://archive.ubuntu.com/ubuntu bionic universe
-RUN apt-get update && \
-    apt-get install icedtea-netx -y
+#RUN apt-get update && \
+#    apt-get install icedtea-netx -y
 
 #install firefox
 RUN apt-get update && apt-get install -y firefox
@@ -60,20 +61,24 @@ ENV HOME /home/galup
 RUN mkdir -p /home/galup/workspace
 WORKDIR /home/galup/workspace
 
+# Install OpenJDK-8
+RUN wget https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244575_d7fc238d0cbf4b0dac67be84580cfb4b
+
+
 # lets do some git cloning, shall we
 ARG GITPASSWD=ByteMe
 RUN git clone https://legalup:"$GITPASSWD"@github.com/legalup/tc_greed.git
 
 # the following get plywood setup
-RUN git clone https://github.com/arc80/plywood
-WORKDIR /home/galup/workspace/plywood
-RUN cmake -DPRESET=make -P Setup.cmake
-WORKDIR /home/galup/workspace/plywood/repos
-RUN git clone https://github.com/arc80/FlapHero
-WORKDIR /home/galup/workspace/plywood
-RUN ./plytool codegen ; ./plytool build --auto glfwFlap ; ./plytool extern select --install assimp.apt ; \
-./plytool extern select --install soloud.source ; ./plytool extern select --install glfw.apt
-RUN ./plytool build --auto glfwFlap ; ./plytool build
+#RUN git clone https://github.com/arc80/plywood
+#WORKDIR /home/galup/workspace/plywood
+#RUN cmake -DPRESET=make -P Setup.cmake
+#WORKDIR /home/galup/workspace/plywood/repos
+#RUN git clone https://github.com/arc80/FlapHero
+#WORKDIR /home/galup/workspace/plywood
+#RUN ./plytool codegen ; ./plytool build --auto glfwFlap ; ./plytool extern select --install assimp.apt ; \
+#./plytool extern select --install soloud.source ; ./plytool extern select --install glfw.apt
+#RUN ./plytool build --auto glfwFlap ; ./plytool build
 
 
 WORKDIR /home/galup
