@@ -84,5 +84,8 @@ RUN git clone https://legalup:"$GITPASSWD"@github.com/legalup/tc_greed.git
 WORKDIR /home/galup
 RUN wget https://github.com/shivawu/topcoder-greed/releases/download/2.0-RC/Greed-2.0-RC-7.1.0.jar
 
+RUN git config --global user.email "legalup@protonmail.com" && git config --global user.name "luis galup"
+
+
 
 
