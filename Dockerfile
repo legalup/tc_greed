@@ -30,7 +30,6 @@ RUN apt-get update && apt-get install -y libassimp-dev libglfw3-dev
 RUN apt-get install -y emacs
 
 
-   
 #RUN apt-get update && \
 #    apt-get install -y openjdk-8-jre-headless && \
 #    apt-get clean;
@@ -62,7 +61,7 @@ RUN mkdir -p /home/galup/workspace
 WORKDIR /home/galup/workspace
 
 # Install OpenJDK-8
-RUN wget https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244575_d7fc238d0cbf4b0dac67be84580cfb4b
+#RUN wget https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244575_d7fc238d0cbf4b0dac67be84580cfb4b
 
 
 # lets do some git cloning, shall we
@@ -85,6 +84,10 @@ WORKDIR /home/galup
 RUN wget https://github.com/shivawu/topcoder-greed/releases/download/2.0-RC/Greed-2.0-RC-7.1.0.jar
 
 RUN git config --global user.email "legalup@protonmail.com" && git config --global user.name "luis galup"
+
+WORKDIR /home/galup/workspace/tc_greed
+USER root
+RUN dpkg -i OpenWebStart_linux_1_4_0.deb
 
 
 
