@@ -138,7 +138,15 @@ inline ll lcm(ll a, ll b) { return (a*b)/gcd(a,b);                  }
 inline ull factorial(ull n) {
   return (n==0)? 1 : n * factorial(n-1); 
 }
-
+inline int gethighestpower(ll prime, ll number)
+{
+  int ret(0);
+  while((number % prime)==0){
+    ret++;
+    number = number/prime;
+  }
+  return ret;
+}
 
 
 vector<uint64_t>   masks(64,0), steps(64,0);
