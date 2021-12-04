@@ -149,6 +149,7 @@ inline int gethighestpower(ll prime, ll number)
 }
 
 
+
 vector<uint64_t>   masks(64,0), steps(64,0);
 
 void prep()
@@ -417,6 +418,7 @@ public:
   vector<T> primes;
 
   // make sure that MAX is at least sqrt n
+  // populated primes with all primes less than n
   void sieve(T n) {
     vector<bool> isPrime(n+1, true);
     isPrime[1] = false;
