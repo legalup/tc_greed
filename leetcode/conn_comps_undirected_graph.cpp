@@ -1,3 +1,5 @@
+// C++ program to print connected components in
+// an undirected graph
 
 
 #include <iostream>
@@ -43,31 +45,48 @@ using ll=long long;
 using ull=unsigned long long;
 using bits=bitset<50>;
 
-template <class T>
-void printv(vector<T> v)
-{
-  copy(a2z(v),ostream_iterator<T>(cout,","));
+using namespace std;
+
+int n;
+vector<int> graph[MAXTOP] ;
+set<int> used;
+vector<int> comp ;
+
+void dfs(int v) {
+  used.insert(v) ;
+  comp.push_back(v);
+  for(auto to : graph[v]) {
+    if notin(to,used) dfs(to);
+  }
 }
 
-//#define MAXN 100
-//int dp[MAXN][MAXN][MAXN][MAXN];
-//memset(dp, -1, sizeof(dp));
-
-struct ${ClassName}
-{
-${<foreach Method.Params p}
-    ${p.Type} ${p.Name}; 
-${<end}
-    ${Method.ReturnType} ${Method.Name}(${Method.Params})
-    {
-${<foreach Method.Params p}
-        this->${p.Name} = ${p.Name}; 
-${<end}
-        return ${Method.ReturnType;ZeroValue};
+void find_comps() {
+  used.clear();
+  fi(0,n){
+    if notin(i,used) {
+      comp.clear();
+      dfs(i);
+      cout << "Component:" ;
+      fj(0,comp.size()) cout << ' ' << comp[j];
+      cout << endl ;
     }
-};
+  }
+}
 
-${CutBegin}
-${<TestCode}
-${CutEnd}
+// Driver code
+int main()
+{
+	// Create a graph given in the above diagram=
+	cout << "Following are connected components \n";
+  n = 100;
+  int p=7;
+  fi(0,n)fj(0,n){
+    if((i%p)==(j%p)){
+      graph[i].push_back(j);
+      graph[j].push_back(i);
+    }
+  };
 
+  find_comps();
+	return 0;
+}
