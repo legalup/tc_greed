@@ -40,21 +40,28 @@ using namespace std;
 using di=deque<int>;
 using vi=vector<int>;
 using si=set<int>;
-using pii=pair<int,int>;
+using pii=int;
 using ll=long long;
 using ull=unsigned long long;
 using bits=bitset<50>;
 
 using namespace std;
 
-int n;
-vector<int> graph[MAXTOP] ;
-set<int> used;
-vector<int> comp ;
+std::ostream& operator<<(std::ostream& strm,
+                         const std::pair<int,int>& kvPair)
+{
+  strm << "(" << kvPair.first << "," << kvPair.second << ")";
+  return strm;
+}
 
-void dfs(int v) {
+int n;
+map<pii, vector<pii>> graph ;
+set<pii> used;
+set<pii> comp ;
+
+void dfs(pii v) {
   used.insert(v) ;
-  comp.push_back(v);
+  comp.insert(v);
   for(auto to : graph[v]) {
     if notin(to,used) dfs(to);
   }
@@ -62,12 +69,12 @@ void dfs(int v) {
 
 void find_comps() {
   used.clear();
-  fi(0,n){
-    if notin(i,used) {
+  for(const auto & i : graph){
+    if notin(i.first,used) {
       comp.clear();
-      dfs(i);
+      dfs(i.first);
       cout << "Component:" ;
-      fj(0,comp.size()) cout << ' ' << comp[j];
+      for(auto cj : comp) cout << ' ' << cj;
       cout << endl ;
     }
   }
