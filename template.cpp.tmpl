@@ -32,6 +32,7 @@ using namespace std;
 #define isin(a, aset) (aset.count((a))>0)
 #define notin(a, aset) (!aset.count((a))>0)
 #define a2z(v)            (v).begin(),(v).end()
+#define len(v)   (v).size()
 
 #define MAXTOP 10000000 //this is the biggest topcoder can do
 
@@ -47,6 +48,12 @@ template <class T>
 void printv(vector<T> v)
 {
   copy(a2z(v),ostream_iterator<T>(cout,","));
+}
+
+std::ostream& operator<<(std::ostream& strm, const std::pair<int,int>& kvPair)
+{
+ strm << "(" << kvPair.first << "," << kvPair.second << ")";
+ return strm;
 }
 
 //#define MAXN 100
