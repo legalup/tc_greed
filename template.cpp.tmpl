@@ -19,6 +19,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
+#include <cassert>
         
 using namespace std;
 
@@ -30,10 +31,11 @@ using namespace std;
 #define fje(a, b) for(int j=((int)(a)); j <= ((int)(b)); j++)
 #define fke(a, b) for(int k=((int)(a)); k <= ((int)(b)); k++)
 #define isin(a, aset) (aset.count((a))>0)
-#define notin(a, aset) (!aset.count((a))>0)
+#define notin(a, aset) (aset.count((a))==0)
 #define a2z(v)            (v).begin(),(v).end()
 #define len(v)   (v).size()
-
+#define forzin(acont) for(auto z : acont)
+  
 #define MAXTOP 10000000 //this is the biggest topcoder can do
 
 using di=deque<int>;
