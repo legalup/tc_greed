@@ -70,7 +70,7 @@ int n;
 map<pii, vector<pii>> graph ;
 map<pair<pii,pii>,int> weights;
 set<pii> visited;
-map<pii,int> dist; 
+map<pii,int> dist; //distance from the start
 
 void topsort(pii v, stack<pii>& stack)
 {
@@ -125,7 +125,7 @@ int main()
   graph[4].push_back(5); weights[{4,5}] = -2;
 
   shortest_path(1);
-  fi(0,n) if isin(i,dist) printf("\nshortest path to %d is %d",i,dist[i]);
+  fi(0,n) if isin(i,dist) printf("\nshortest path from 1 to %d is %d",i,dist[i]);
                      
 
   cout << endl;
