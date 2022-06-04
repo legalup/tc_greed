@@ -56,8 +56,8 @@ void printv(vector<T> v)
 
 std::ostream& operator<<(std::ostream& strm, const std::pair<int,int>& kvPair)
 {
- strm << "(" << kvPair.first << "," << kvPair.second << ")";
- return strm;
+  strm << "(" << kvPair.first << "," << kvPair.second << ")";
+  return strm;
 }
 
 //#define MAXN 100
@@ -69,44 +69,21 @@ std::ostream& operator<<(std::ostream& strm, const std::pair<int,int>& kvPair)
 int n;
 map<pii, vector<pii>> graph ;
 map<pair<pii,pii>,int> weights;
-set<pii> visited;
-map<pii,int> dist; 
+map<pii,int> dist; //is the distance to the end
 
-void topsort(pii v, stack<pii>& stack)
+int shortest_path(pii start)
 {
-  visited.insert(v);
-  forzin(graph[v])
-    if notin(z,visited) topsort(z,stack);
 
-  stack.push(v);
-}
+  if isin(start,dist) return dist[start];
+    
+  set<int> dists;
+  forzin(graph[start]) dists.insert(weights[{start,z}]+shortest_path(z));
 
-
-void shortest_path(pii start)
-{
-  //do topological sort first, for the nonrecursive aspect
-  stack<pii> ts;
-
-  //iterated through all nodes. for this example, assume nodes are ints in range(0,n)
-  fi(0,n) if notin(i,visited) topsort(i,ts);
-
-  //reset the distances
-  dist.clear();
-  dist[start]=0;
-
-  //now do the relaxation step
-  while(!ts.empty()){
-    auto u = ts.top();
-    ts.pop();
-
-    if isin(u,dist){
-        forzin(graph[u]) {
-          if isin(z,dist) dist[z] = min(dist[z],dist[u]+weights[{u,z}]);
-          else dist[z] = dist[u]+weights[{u,z}];
-        };
-      };
-  };
+  if(dists.empty()) dist[start]=1e9;
+  else dist[start]=*dists.begin();
+  return dist[start];
 };
+
 
 
 // Driver code
@@ -124,8 +101,14 @@ int main()
   graph[3].push_back(4); weights[{3,4}] = -1;
   graph[4].push_back(5); weights[{4,5}] = -2;
 
-  shortest_path(1);
-  fi(0,n) if isin(i,dist) printf("\nshortest path to %d is %d",i,dist[i]);
+
+  
+  fi(0,n){
+    //here, we are telling it what the end is.
+    dist.clear();
+    dist[i]=0;
+    printf("\nshortest path from 1 to %d is %d", i, shortest_path(1));
+  }
                      
 
   cout << endl;
