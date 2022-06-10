@@ -40,10 +40,11 @@ using namespace std;
 using di=deque<int>;
 using vi=vector<int>;
 using si=set<int>;
-using pii=int;
+using pii=pair<int,int>;
 using ll=long long;
 using ull=unsigned long long;
 using bits=bitset<50>;
+using vert=int;
 
 using namespace std;
 
@@ -55,11 +56,12 @@ std::ostream& operator<<(std::ostream& strm,
 }
 
 int n;
-map<pii, vector<pii>> graph ;
-set<pii> used;
-set<pii> comp ;
+vector<vert> verts;
+map<vert, vector<vert>> graph ;
+set<vert> used;
+set<vert> comp ;
 
-void dfs(pii v) {
+void dfs(vert v) {
   used.insert(v) ;
   comp.insert(v);
   for(auto to : graph[v]) {
@@ -69,10 +71,10 @@ void dfs(pii v) {
 
 void find_comps() {
   used.clear();
-  for(const auto & i : graph){
-    if notin(i.first,used) {
+  for(const auto & i : verts){
+    if notin(i,used) {
       comp.clear();
-      dfs(i.first);
+      dfs(i);
       cout << "Component:" ;
       for(auto cj : comp) cout << ' ' << cj;
       cout << endl ;
@@ -87,6 +89,7 @@ int main()
 	cout << "Following are connected components \n";
   n = 100;
   int p=7;
+  fi(0,n) verts.push_back(i);
   fi(0,n)fj(0,n){
     if((i%p)==(j%p)){
       graph[i].push_back(j);
