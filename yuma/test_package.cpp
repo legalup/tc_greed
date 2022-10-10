@@ -56,17 +56,19 @@ void task_thread() {
   futs.emplace_back(std::move(result));
 }
 
-int runner()
-{
-  return 0;
+void test_async() {
+  
+  auto result = std::async(std::launch::async, &threadFunc, 2,10);
+  futs.emplace_back(std::move(result));
 }
 
 int main(int argc, char **argv) {
-  task_lambda();
+ /*  task_lambda();
   task_bind();
 
-  task_thread();
-  std::cout << "just got the future" << std::endl;
+  task_thread(); */
+  test_async();
+  
   std::future_status status;
   std::chrono::seconds ones(1);
   do {
