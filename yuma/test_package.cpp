@@ -8,7 +8,7 @@
 int f(int x, int y) { return std::pow(x, y); }
 
 
-std::future g_fut;
+std::vector<std::future<int>> futs;
 
 int threadFunc(int a, int b) {
   std::cout << "Thread Function :: Start" << std::endl;
@@ -44,28 +44,33 @@ void task_bind() {
   std::cout << "task_bind:\t" << result.get() << '\n';
 }
 
-std::future<int> task_thread() {
+void task_thread() {
   std::packaged_task<int(int, int)> task(threadFunc);
   std::future<int> result = task.get_future();
 
   std::thread task_td(std::move(task), 2, 10);
 
   task_td.detach();
-  std::cout << "hi there" << std::endl;
+  
   //    std::cout << "task_thread:\t" << result.get() << '\n';
-  return result;
+  futs.emplace_back(std::move(result));
+}
+
+int runner()
+{
+  return 0;
 }
 
 int main(int argc, char **argv) {
   task_lambda();
   task_bind();
 
-  auto fut = task_thread();
+  task_thread();
   std::cout << "just got the future" << std::endl;
   std::future_status status;
   std::chrono::seconds ones(1);
   do {
-    switch (status = fut.wait_for(ones); status) {
+    switch (status = futs[0].wait_for(ones); status) {
     case std::future_status::deferred:
       std::cout << "deferred\n";
       break;
@@ -78,5 +83,6 @@ int main(int argc, char **argv) {
     }
   } while (status != std::future_status::ready);
 
-  std::cout << "here is my answer: " << fut.get() << std::endl;
+  std::cout << "here is my answer: " << futs[0].get() << std::endl;
+  futs.clear();
 }
