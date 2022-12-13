@@ -1,28 +1,5 @@
-#include <algorithm>
-#include <functional>
-#include <iostream>
-#include <list>
-#include <map>
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <deque>
-#include <queue>
-#include <cmath>
-#include <cstdarg>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <iterator>
-#include <utility>
-#include <stdint.h>
-#include <cassert>
-#include <numeric> //for accumulate
+
 #include <bits/stdc++.h>
-
-
 
 namespace std
 {
@@ -32,6 +9,19 @@ namespace std
       strm << "(" << kvPair.first << "," << kvPair.second << ")";
       return strm;
     }
+}
+
+
+template <class T>
+void printv(vector<T> v)
+{
+  copy(a2z(v),ostream_iterator<T>(cout,","));
+}
+
+template <class T>
+void printd(deque<T> v)
+{
+  copy(a2z(v),ostream_iterator<T>(cout,","));
 }
 
 //////////////////////////////////////////////
@@ -114,21 +104,18 @@ struct lttype
 //__builtin_popcountll (count number of 1s in an unsigned ll)
 
 
-#define fi(a, b) for(int i=((int)(a)); i < ((int)(b)); i++)
-#define fj(a, b) for(int j=((int)(a)); j < ((int)(b)); j++)
-#define fk(a, b) for(int k=((int)(a)); k < ((int)(b)); k++)
-#define fie(a, b) for(int i=((int)(a)); i <= ((int)(b)); i++)
-#define fje(a, b) for(int j=((int)(a)); j <= ((int)(b)); j++)
-#define fim(a, b) for(int i=((int)(a)); i > ((int)(b)); i--)
-#define fjm(a, b) for(int j=((int)(a)); j > ((int)(b)); j--)
-#define fime(a, b) for(int i=((int)(a)); i >= ((int)(b)); i--)
-#define fjme(a, b) for(int j=((int)(a)); j >= ((int)(b)); j--)
-#define all(x) (x).begin(), (x).end()
-#define sz(a) int((a).size()) 
-#define tr(c,i) for(typeof((c).begin() i = (c).begin(); i != (c).end(); i++) 
-#define present(c,x) ((c).find(x) != (c).end()) 
-#define cpresent(c,x) (find(all(c),x) != (c).end()) 
-#define len(v)   (v).size()
+
+#define fi(a, b) for (int i = ((int)(a)); i < ((int)(b)); i++)
+#define fj(a, b) for (int j = ((int)(a)); j < ((int)(b)); j++)
+#define fk(a, b) for (int k = ((int)(a)); k < ((int)(b)); k++)
+#define fori(a) for (int i = ((int)(0)); i < ((int)(a.size())); i++)
+#define forj(a) for (int j = ((int)(0)); j < ((int)(a.size())); j++)
+#define a2z(v) (v).begin(), (v).end()
+#define isin(a, aset) (aset.count((a))>0)
+#define notin(a, aset) (aset.count((a))==0)
+
+#define len(v) (v).size()
+
 
 typedef long long ll;
 typedef unsigned long long ull;
@@ -166,33 +153,17 @@ struct ltstr
   }
 };
 
-typedef vector<int> vi;
-typedef vector<vi> vvi;
-typedef vector<string> vs;
-typedef vector<vs> vvs;
-typedef deque<int> di;
-typedef pair<int,int> pii;
-typedef vector<pii> vpii;
-typedef vector<vpii> vvpii;
-typedef deque<pii> dpii;
-typedef set<int> si;
-typedef deque<int> di;
-typedef set<string> ss;
-typedef set<char> sc;
-typedef set<pii> spii;
-typedef pair<int,pii> pipii;
-typedef pair< pii, int > tii;
-//typedef map<tii,int> cache;
-typedef vector< double > vd;
-typedef vector< vd  > vvd;
-typedef deque< di  > ddi;
-typedef set< int > si;
-typedef set< string  > ss;
 
-typedef pair<int, string> pis;
-typedef pair<string, int> psi;
-typedef pair<string, string> pss;
-typedef pair< pss, string > tss;
+using vi = vector<int>;
+using si = set<int>;
+using vd = vector<double>;
+using graph = map<int, multiset<int>>;
+
+using ull = long long;
+using pii = pair<int,int>;
+using pcc = pair<char, char>;
+using tri = tuple<int, int, int>;
+using pq = priority_queue<int, vector<int>, less<int>>;
 
 #define mp(x, y) make_pair(x, y)
 #define mt(x, y, z) mp(mp(x,y),z)
