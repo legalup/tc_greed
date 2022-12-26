@@ -1,44 +1,31 @@
 
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <iterator>
-#include <limits>
-#include <queue>
-#include <vector>
-#include <tuple>
-#include <unordered_map>
-#include <set>
-#include <string>
-#include <algorithm>
-#include <bitset>
-#include <numeric>
-#include <map>
-#include <unordered_map>
-#include <utility>
 
+#include <bits/stdc++.h>
 using namespace std;
 
 
 #define fi(a, b) for(int i=((int)(a)); i < ((int)(b)); i++)
 #define fj(a, b) for(int j=((int)(a)); j < ((int)(b)); j++)
 #define fk(a, b) for(int k=((int)(a)); k < ((int)(b)); k++)
-#define fori(a) for(int i=((int)(0)); i < ((int)(a.size())); i++)
-#define forj(a) for(int j=((int)(0)); j < ((int)(a.size())); j++)
+#define fie(a, b) for(int i=((int)(a)); i <= ((int)(b)); i++)
+#define fje(a, b) for(int j=((int)(a)); j <= ((int)(b)); j++)
+#define fke(a, b) for(int k=((int)(a)); k <= ((int)(b)); k++)
+#define isin(a, aset) (aset.count((a))>0)
+#define isnotin(a, aset) (aset.count((a))==0)
 #define a2z(v)            (v).begin(),(v).end()
-#define isin(b,a)        find(all(a),(b))!=(a).end()
-#define isnotin(b,a)        find(all(a),(b))==(a).end()
 #define len(v)   (v).size()
+#define forzin(acont) for(auto z : acont)
+  
+#define MAXTOP 10000000 //this is the biggest topcoder can do
 
-
+using di=deque<int>;
 using vi=vector<int>;
 using si=set<int>;
-using vd=vector<double>;
-using graph = map<int,multiset<int>>;
-
-using ull=long long;
-using pii = pair<ull,ull>;
+using pii=pair<int,int>;
+using ll=long long;
+using ull=unsigned long long;
+using bits=bitset<50>;
 using tri=tuple<int,int,int>;
 using pq = priority_queue<int, vector<int>, less<int>>;
 
@@ -72,6 +59,29 @@ struct gtpii
 };
 
 using pqpii = priority_queue<pii, vector<pii>, gtpii>;
+
+template <class T>
+void printv(vector<T> v)
+{
+  copy(a2z(v),ostream_iterator<T>(cout,","));
+}
+
+
+template <class T>
+void printd(deque<T> v)
+{
+  copy(a2z(v),ostream_iterator<T>(cout,","));
+}
+
+std::ostream& operator<<(std::ostream& strm, const std::pair<int,int>& kvPair)
+{
+ strm << "(" << kvPair.first << "," << kvPair.second << ")";
+ return strm;
+}
+
+/////////////////////////////////////
+// start here
+///////////////////////////////////////
 
 
 template<typename T>
@@ -111,7 +121,7 @@ main(int argc, char**argv)
 
   ios_base::sync_with_stdio(false); cout.setf(ios::fixed); cout.precision(20);
    
- //#define TEST
+ #define TEST
 
 #ifdef TEST
   ifstream myfile ("data.txt");

@@ -11,7 +11,7 @@ using namespace std;
 #define fje(a, b) for(int j=((int)(a)); j <= ((int)(b)); j++)
 #define fke(a, b) for(int k=((int)(a)); k <= ((int)(b)); k++)
 #define isin(a, aset) (aset.count((a))>0)
-#define notin(a, aset) (aset.count((a))==0)
+#define isnotin(a, aset) (aset.count((a))==0)
 #define a2z(v)            (v).begin(),(v).end()
 #define len(v)   (v).size()
 #define forzin(acont) for(auto z : acont)
@@ -28,6 +28,13 @@ using bits=bitset<50>;
 
 template <class T>
 void printv(vector<T> v)
+{
+  copy(a2z(v),ostream_iterator<T>(cout,","));
+}
+
+
+template <class T>
+void printd(deque<T> v)
 {
   copy(a2z(v),ostream_iterator<T>(cout,","));
 }
