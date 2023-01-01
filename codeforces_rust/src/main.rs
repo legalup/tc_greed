@@ -31,10 +31,10 @@ pub fn main() {
         idx = tc * 3 + 2;
         let mut line = &lines[idx as usize];
 
-        let mut n_numbers = vec_from_str(line);
+        let mut n_numbers = vec_from_str(line).unwrap();
         line = &lines[(idx + 1) as usize];
 
-        let mut m_numbers = vec_from_str(line);
+        let mut m_numbers = vec_from_str(line).unwrap();
         for num in m_numbers {
             place_where_small_found(&mut n_numbers, num);
         }
@@ -65,10 +65,30 @@ pub fn int_from_str(line: &str) -> i32 {
     line.trim().parse::<i32>().unwrap()
 }
 
-pub fn vec_from_str(line: &str) -> Vec<i64> {
-    line.split_whitespace()
-        .map(|x| x.parse::<i64>().unwrap())
-        .collect::<Vec<i64>>()
+pub fn vec_from_str<T: FromStr>(line: &str) -> Option<Vec<T>>
+where
+    <T as FromStr>::Err: Debug,
+{
+    let numbers = parse_to_vec::<T, _>(line.split_ascii_whitespace())
+        .map_err(|e| format!("can't parse data: {:?}", e))
+        .ok()?;
+
+    Some(numbers)
+}
+
+fn parse_to_vec<'a, T, It>(it: It) -> Result<Vec<T>, <T as FromStr>::Err>
+where
+    T: FromStr,
+    It: Iterator<Item = &'a str>,
+{
+    it.map(|v| v.parse::<T>()).fold(Ok(Vec::new()), |vals, v| {
+        vals.map(|mut vals| {
+            v.map(|v| {
+                vals.push(v);
+                vals
+            })
+        })?
+    })
 }
 
 pub fn get_lines_from_file() -> Vec<String> {
