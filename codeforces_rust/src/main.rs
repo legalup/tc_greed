@@ -63,26 +63,18 @@ pub fn vec_from_str<T: FromStr>(line: &str) -> Option<Vec<T>>
 where
     <T as FromStr>::Err: Debug,
 {
-    let numbers = parse_to_vec::<T, _>(line.split_ascii_whitespace())
+    line.split_ascii_whitespace()
+        .map(|v| v.parse::<T>())
+        .fold(Ok(Vec::new()), |vals, v| {
+            vals.map(|mut vals| {
+                v.map(|v| {
+                    vals.push(v);
+                    vals
+                })
+            })?
+        })
         .map_err(|e| format!("can't parse data: {:?}", e))
-        .ok()?;
-
-    Some(numbers)
-}
-
-fn parse_to_vec<'a, T, It>(it: It) -> Result<Vec<T>, <T as FromStr>::Err>
-where
-    T: FromStr,
-    It: Iterator<Item = &'a str>,
-{
-    it.map(|v| v.parse::<T>()).fold(Ok(Vec::new()), |vals, v| {
-        vals.map(|mut vals| {
-            v.map(|v| {
-                vals.push(v);
-                vals
-            })
-        })?
-    })
+        .ok()
 }
 
 pub fn get_lines_from_file() -> Vec<String> {
