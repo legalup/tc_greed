@@ -1,4 +1,5 @@
 #![allow(unused)]
+use std::env;
 use std::fmt;
 use std::fmt::{Debug, Display};
 use std::fs::File;
@@ -7,22 +8,15 @@ use std::io::{BufRead, BufReader};
 use std::str::{from_utf8_unchecked, FromStr};
 
 pub fn main() {
-    /*
-    //lets go through all the lines
-    let test_cases = get_int_input_stdio();
-    for _ in 0..test_cases {
-        get_line_input_stdio();
-        let mut n_numbers = get_line_input_stdio()
-            .split_whitespace()
-            .map(|x| x.parse::<i64>().unwrap())
-            .collect::<Vec<i64>>();
-        let m_numbers = get_line_input_stdio()
-            .split_whitespace()
-            .map(|x| x.parse::<i64>().unwrap())
-            .collect::<Vec<i64>>();
+    //get command line args
+    let args: Vec<String> = env::args().collect();
 
-     */
-    let mut lines = get_lines_from_file();
+    let mut lines = if (args.len() > 1 && &args[1] == "t") {
+        get_lines_from_file()
+    } else {
+        get_lines_from_stdio()
+    };
+
     let test_cases = int_from_str(&lines[0]);
     println!("here is test cases {}", test_cases);
     let mut tc: i32 = 0;
@@ -31,10 +25,10 @@ pub fn main() {
         idx = tc * 3 + 2;
         let mut line = &lines[idx as usize];
 
-        let mut n_numbers = vec_from_str(line);
+        let mut n_numbers = vec_from_str(line).unwrap();
         line = &lines[(idx + 1) as usize];
 
-        let mut m_numbers = vec_from_str(line);
+        let mut m_numbers = vec_from_str(line).unwrap();
         for num in m_numbers {
             place_where_small_found(&mut n_numbers, num);
         }
@@ -43,7 +37,7 @@ pub fn main() {
     }
 }
 
-pub fn place_where_small_found(numbers: &mut Vec<i64>, target: i64) {
+pub fn place_where_small_found(numbers: &mut [i64], target: i64) {
     let small = numbers.iter().min().unwrap();
     let index = numbers.iter().position(|&x| x == *small).unwrap();
     numbers[index] = target;
@@ -65,10 +59,30 @@ pub fn int_from_str(line: &str) -> i32 {
     line.trim().parse::<i32>().unwrap()
 }
 
-pub fn vec_from_str(line: &str) -> Vec<i64> {
-    line.split_whitespace()
-        .map(|x| x.parse::<i64>().unwrap())
-        .collect::<Vec<i64>>()
+pub fn vec_from_str<T: FromStr>(line: &str) -> Option<Vec<T>>
+where
+    <T as FromStr>::Err: Debug,
+{
+    let numbers = parse_to_vec::<T, _>(line.split_ascii_whitespace())
+        .map_err(|e| format!("can't parse data: {:?}", e))
+        .ok()?;
+
+    Some(numbers)
+}
+
+fn parse_to_vec<'a, T, It>(it: It) -> Result<Vec<T>, <T as FromStr>::Err>
+where
+    T: FromStr,
+    It: Iterator<Item = &'a str>,
+{
+    it.map(|v| v.parse::<T>()).fold(Ok(Vec::new()), |vals, v| {
+        vals.map(|mut vals| {
+            v.map(|v| {
+                vals.push(v);
+                vals
+            })
+        })?
+    })
 }
 
 pub fn get_lines_from_file() -> Vec<String> {
