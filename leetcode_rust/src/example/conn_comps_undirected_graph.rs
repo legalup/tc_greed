@@ -47,14 +47,10 @@ pub fn doit(verts: &[Vert], graph: &HashMap<Vert, HashSet<Vert>>) {
     for v in verts.iter() {
         //println!("doit. here is v:{:?} in verts", v);
         comp.clear();
-        let mut nuused = used.clone();
+
         if !used.contains(&v) {
-            dfs(v, graph, &mut nuused, &mut comp);
+            dfs(v, graph, &mut used, &mut comp);
             println!(" component: {:?}", comp);
-        }
-        //now update used with what we learned
-        for vv in nuused {
-            used.insert(vv);
         }
     }
 }

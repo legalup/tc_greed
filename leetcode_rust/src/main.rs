@@ -10,7 +10,7 @@ pub fn add(left: usize, right: usize) -> usize {
 fn test_conn_comps_undirected_graph() {
     let p: usize = 7;
 
-    let n: i32 = 20;
+    let n: i32 = 100;
     let un = n as usize;
     let mut verts: Vec<Vert> = Vec::with_capacity(un);
     for i in 0..n {
@@ -54,8 +54,6 @@ fn test_conn_comps_undirected_graph() {
 }
 
 fn main() {
-    println!("go fuck yourself, world");
-
     test_conn_comps_undirected_graph();
 }
 
