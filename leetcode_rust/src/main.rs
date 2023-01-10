@@ -1,7 +1,20 @@
 #[warn(unused_imports)]
-use example::conn_comps_undirected_graph::{doit, Vert};
+use example::conn_comps_undirected_graph::{doit};
 use std::collections::{HashMap, HashSet};
 mod example;
+
+type Graph = HashMap<Vert, HashSet<Vert>>;
+
+#[derive(Eq, Hash, PartialEq, Debug, Copy, Clone)]
+pub struct Vert {
+    pub val: i32,
+}   
+
+impl Vert {
+    pub fn new(val: i32) -> Self {
+        Vert { val }
+    }
+}
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right
@@ -18,7 +31,7 @@ fn test_conn_comps_undirected_graph() {
         verts.push(vv);
     }
 
-    let mut graph: HashMap<Vert, HashSet<Vert>> = HashMap::with_capacity(un);
+    let mut graph : Graph = HashMap::with_capacity(un);
 
     for i in 0..un {
         for j in 0..un {
@@ -44,9 +57,6 @@ fn test_conn_comps_undirected_graph() {
             }
         }
     }
-
-    //println!("test. size of graph is {}", graph.len());
-    //println!(" test. here is graph {:?}", graph);
 
     doit(&verts, &graph);
 
