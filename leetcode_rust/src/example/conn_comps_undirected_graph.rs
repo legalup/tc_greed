@@ -14,7 +14,6 @@ pub fn dfs<'a>(
 ) {
     visited.insert(v);
     comp.insert(v);
-  
 
     for nbr in graph[v].iter() {
         if !visited.contains(nbr) {
@@ -29,9 +28,7 @@ pub fn doit(verts: &[Vert], graph: &Graph) {
 
     visited.clear();
 
-    
     for v in verts.iter() {
-        
         comp.clear();
 
         if !visited.contains(&v) {
