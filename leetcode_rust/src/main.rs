@@ -107,7 +107,7 @@ fn test_topsort_dfs_dag() {
 }
 
 fn test_kruskal() {
-    let n: i32 = 15;
+    let n: i32 = 4;
     let un = n as usize;
     let mut verts: Vec<Vert> = Vec::with_capacity(un);
     let mut graph: WeightedGraph = HashMap::with_capacity(un);
@@ -118,20 +118,13 @@ fn test_kruskal() {
         graph.insert(vv, HashSet::with_capacity(un));
     }
 
-    add_edge(&mut graph,0, verts[1], verts[4]);
-    add_edge(&mut graph,0, verts[7], verts[8]);
-    add_edge(&mut graph,1, verts[2], verts[8]);
-    add_edge(&mut graph,1, verts[7], verts[11]);
-    add_edge(&mut graph,2, verts[3], verts[7]);
-    add_edge(&mut graph,2, verts[8], verts[2]);
-    add_edge(&mut graph,2, verts[5], verts[4]);
-    add_edge(&mut graph,3, verts[4], verts[9]);
-    add_edge(&mut graph,3, verts[5], verts[14]);
-    add_edge(&mut graph,4, verts[5], verts[10]);
-    add_edge(&mut graph,5, verts[6], verts[2]);
-    add_edge(&mut graph,6, verts[7], verts[1]);
-    add_edge(&mut graph,6, verts[8], verts[6]);
-    add_edge(&mut graph,7, verts[8], verts[7]);
+    add_edge(&mut graph,5, verts[0], verts[1]);
+    add_edge(&mut graph,10, verts[2], verts[1]);
+    add_edge(&mut graph,15, verts[2], verts[3]);
+    add_edge(&mut graph,20, verts[0], verts[3]);
+    add_edge(&mut graph,1, verts[0], verts[2]);
+    add_edge(&mut graph,2, verts[3], verts[1]);
+   
 
     let wt = kruskal::doit(&verts, &graph);
 

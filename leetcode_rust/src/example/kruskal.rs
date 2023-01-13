@@ -1,7 +1,7 @@
 #![allow(unused)]
 
 use crate::{Vert, WeightedGraph};
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 /********************************
  * Given an undirected connected and weighted grasph, find the minimum
@@ -17,43 +17,67 @@ pub fn find_set(mut v: Vert, parent: &mut HashMap<Vert, Vert>) -> Vert {
         return v;
     }
 
-    //can this be shortened to one line
     let p = find_set(parent[&v], parent);
+    parent.insert(v, p);
 
-    parent.insert(v,p);
-   
-    parent[&v]
+    p
 }
 
 //this particular union set choose the parent that is the
 //smallest in dictionary ordering. theres many other ways to go here
 //especially to optimize for size & rank.
-fn union_sets(mut a : Vert, mut b: Vert, parent: &mut HashMap<Vert, Vert>, rnk : &mut HashMap<Vert, u32>) {
+fn union_sets(
+    mut a: Vert,
+    mut b: Vert,
+    parent: &mut HashMap<Vert, Vert>,
+    rnk: &mut HashMap<Vert, u32>,
+) {
     //is mut a really necessary
-  a = find_set(a, parent);
-  b = find_set(b, parent);
-  // for now, will use rank. 
-  if rnk[&a]<rnk[&b] { 
-    parent.insert(b,a);
-  }
-  else {
-    parent.insert(a,b);
-  }
+    a = find_set(a, parent);
+    b = find_set(b, parent);
 
-  if rnk[&a]==rnk[&b] {
-     rnk.entry(b).and_modify(|cnt| { *cnt += 1;});
-  }
+    if a != b {
+        if rnk[&a] < rnk[&b] {
+            std::mem::swap(&mut a, &mut b);
+        }
+        //vert with highest rank is new parent
+        parent.insert(b,a);
+        if rnk[&a] == rnk[&b]{
+            rnk.entry(a).and_modify(|cnt| {
+                    *cnt += 1;
+                });
+        }
+        // for now, will use rank.
+        /* 
+        if rnk[&a] < rnk[&b] {
+            parent.insert(b, a);
+        } else {
+            parent.insert(a, b);
+        }
 
-  // can do other things. can look at some other natural ordering, depending
-  // on problem 
+        if rnk[&a] == rnk[&b] {
+            if a <= b {
+                rnk.entry(b).and_modify(|cnt| {
+                    *cnt += 1;
+                });
+            } else {
+                rnk.entry(a).and_modify(|cnt| {
+                    *cnt += 1;
+                });
+            }
+        } 
+        */
+    }
 
+    // can do other things. can look at some other natural ordering, depending
+    // on problem
 }
 
 //////////////////////////////////////////////
 // disjoint union. great for finding cc of an image and min spanning sets
 //////////////////////////////////////////////////////////////
 
-pub fn doit(verts: &[Vert], graph: &WeightedGraph) -> u32{
+pub fn doit(verts: &[Vert], graph: &WeightedGraph) -> u32 {
     let mut visited: HashSet<&Vert> = HashSet::new();
 
     //lets make the weights
@@ -70,9 +94,10 @@ pub fn doit(verts: &[Vert], graph: &WeightedGraph) -> u32{
         }
     }
 
-    //look at me converting a hashset to a vec. yay 4 iters
-    //doing this for the sort
-    let mut weight_vec = Vec::from_iter(weights);
+    // look at me converting a hashset to a vec. yay 4 iters
+    // doing this for the sort
+    // and here is a lovely turbofish...
+    let mut weight_vec = weights.into_iter().collect::<Vec<_>>();
     weight_vec.sort();
 
     //needed data structures
@@ -81,18 +106,18 @@ pub fn doit(verts: &[Vert], graph: &WeightedGraph) -> u32{
 
     for vv in verts.iter() {
         parent.insert(*vv, *vv);
-        rnk.insert(*vv,0);
+        rnk.insert(*vv, 0);
     }
 
-    let mut mst_wt= 032;
+    let mut mst_wt = 0;
 
     for z in weight_vec.iter() {
         let set_u = find_set(z.1, &mut parent);
-        let set_v= find_set(z.2, &mut parent);
+        let set_v = find_set(z.2, &mut parent);
 
-        if set_u == set_v{
+        if set_u != set_v {
             mst_wt += z.0;
-            union_sets(set_u, set_v, &mut parent, &mut rnk);
+            union_sets(z.1, z.2, &mut parent, &mut rnk);
         }
     }
 
