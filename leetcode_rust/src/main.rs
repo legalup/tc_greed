@@ -1,12 +1,24 @@
 #[warn(unused_imports)]
 use example::conn_comps_undirected_graph;
 use example::topsort_dfs_dag;
+use example::kruskal;
 use std::collections::{HashMap, HashSet};
 mod example;
 
 type Graph = HashMap<Vert, HashSet<Vert>>;
+type WeightedGraph = HashMap<Vert, HashSet<(Vert, u32)>>;
 
-#[derive(Eq, Hash, PartialEq, Debug, Copy, Clone)]
+fn add_edge(graph : &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
+    graph.entry(v1).and_modify(|hs| {
+        hs.insert((v2, wt));
+    });
+
+    graph.entry(v2).and_modify(|hs| {
+        hs.insert((v1, wt));
+    });
+}
+
+#[derive(Eq, Hash, PartialOrd, Ord, PartialEq, Debug, Copy, Clone)]
 pub struct Vert {
     pub val: i32,
 }
@@ -94,12 +106,47 @@ fn test_topsort_dfs_dag() {
     }
 }
 
+fn test_kruskal() {
+    let n: i32 = 15;
+    let un = n as usize;
+    let mut verts: Vec<Vert> = Vec::with_capacity(un);
+    let mut graph: WeightedGraph = HashMap::with_capacity(un);
+
+    for i in 0..n {
+        let vv = Vert { val: i };
+        verts.push(vv);
+        graph.insert(vv, HashSet::with_capacity(un));
+    }
+
+    add_edge(&mut graph,0, verts[1], verts[4]);
+    add_edge(&mut graph,0, verts[7], verts[8]);
+    add_edge(&mut graph,1, verts[2], verts[8]);
+    add_edge(&mut graph,1, verts[7], verts[11]);
+    add_edge(&mut graph,2, verts[3], verts[7]);
+    add_edge(&mut graph,2, verts[8], verts[2]);
+    add_edge(&mut graph,2, verts[5], verts[4]);
+    add_edge(&mut graph,3, verts[4], verts[9]);
+    add_edge(&mut graph,3, verts[5], verts[14]);
+    add_edge(&mut graph,4, verts[5], verts[10]);
+    add_edge(&mut graph,5, verts[6], verts[2]);
+    add_edge(&mut graph,6, verts[7], verts[1]);
+    add_edge(&mut graph,6, verts[8], verts[6]);
+    add_edge(&mut graph,7, verts[8], verts[7]);
+
+    let wt = kruskal::doit(&verts, &graph);
+
+    println!("yo, the min spanning tree weight is: {}", wt);
+}
+
 fn main() {
     println!("testing conn comps-----------");
     test_conn_comps_undirected_graph();
 
     println!("testing topsort------------");
     test_topsort_dfs_dag();
+
+    println!("testing kruskal--------------");
+    test_kruskal();
 }
 
 #[cfg(test)]
