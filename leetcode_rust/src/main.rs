@@ -2,6 +2,7 @@
 use example::conn_comps_undirected_graph;
 use example::topsort_dfs_dag;
 use example::kruskal;
+use example::union_find_detect_cycle;
 use std::collections::{HashMap, HashSet};
 mod example;
 
@@ -15,6 +16,16 @@ fn add_edge(graph : &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
 
     graph.entry(v2).and_modify(|hs| {
         hs.insert((v1, wt));
+    });
+}
+
+fn add_graph_edge(graph : &mut Graph, v1: Vert, v2: Vert) {
+    graph.entry(v1).and_modify(|hs| {
+        hs.insert(v2);
+    });
+
+    graph.entry(v2).and_modify(|hs| {
+        hs.insert(v1);
     });
 }
 
@@ -131,6 +142,36 @@ fn test_kruskal() {
     println!("yo, the min spanning tree weight is: {}", wt);
 }
 
+fn test_union_find_detect_cycle() {
+    let n: i32 = 4;
+    let un = n as usize;
+    let mut verts: Vec<Vert> = Vec::with_capacity(un);
+    let mut graph: Graph = HashMap::with_capacity(un);
+
+    for i in 0..n {
+        let vv = Vert { val: i };
+        verts.push(vv);
+        graph.insert(vv, HashSet::with_capacity(un));
+    }
+
+    add_graph_edge(&mut graph, verts[0], verts[1]);
+    add_graph_edge(&mut graph, verts[2], verts[1]);
+    add_graph_edge(&mut graph, verts[2], verts[3]);
+    add_graph_edge(&mut graph, verts[0], verts[3]);
+
+
+    let hascycle = example::union_find_detect_cycle::doit(
+        &verts, &graph);
+
+    if hascycle {
+        println!("it does have a cycle")
+    }
+        else{
+            print!("it does NOT have a cycle.");
+        }
+
+}
+
 fn main() {
     println!("testing conn comps-----------");
     test_conn_comps_undirected_graph();
@@ -140,6 +181,9 @@ fn main() {
 
     println!("testing kruskal--------------");
     test_kruskal();
+
+    println!("testing cycle detect");
+    test_union_find_detect_cycle();
 }
 
 #[cfg(test)]
