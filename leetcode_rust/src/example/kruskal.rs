@@ -41,14 +41,14 @@ fn union_sets(
             std::mem::swap(&mut a, &mut b);
         }
         //vert with highest rank is new parent
-        parent.insert(b,a);
-        if rnk[&a] == rnk[&b]{
+        parent.insert(b, a);
+        if rnk[&a] == rnk[&b] {
             rnk.entry(a).and_modify(|cnt| {
-                    *cnt += 1;
-                });
+                *cnt += 1;
+            });
         }
         // for now, will use rank.
-        /* 
+        /*
         if rnk[&a] < rnk[&b] {
             parent.insert(b, a);
         } else {
@@ -65,7 +65,7 @@ fn union_sets(
                     *cnt += 1;
                 });
             }
-        } 
+        }
         */
     }
 

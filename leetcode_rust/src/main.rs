@@ -1,7 +1,8 @@
 #[warn(unused_imports)]
 use example::conn_comps_undirected_graph;
-use example::topsort_dfs_dag;
 use example::kruskal;
+use example::partition_generator;
+use example::topsort_dfs_dag;
 use example::union_find_detect_cycle;
 use std::collections::{HashMap, HashSet};
 mod example;
@@ -9,7 +10,7 @@ mod example;
 type Graph = HashMap<Vert, HashSet<Vert>>;
 type WeightedGraph = HashMap<Vert, HashSet<(Vert, u32)>>;
 
-fn add_edge(graph : &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
+fn add_edge(graph: &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
     graph.entry(v1).and_modify(|hs| {
         hs.insert((v2, wt));
     });
@@ -19,7 +20,7 @@ fn add_edge(graph : &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
     });
 }
 
-fn add_graph_edge(graph : &mut Graph, v1: Vert, v2: Vert) {
+fn add_graph_edge(graph: &mut Graph, v1: Vert, v2: Vert) {
     graph.entry(v1).and_modify(|hs| {
         hs.insert(v2);
     });
@@ -129,13 +130,12 @@ fn test_kruskal() {
         graph.insert(vv, HashSet::with_capacity(un));
     }
 
-    add_edge(&mut graph,5, verts[0], verts[1]);
-    add_edge(&mut graph,10, verts[2], verts[1]);
-    add_edge(&mut graph,15, verts[2], verts[3]);
-    add_edge(&mut graph,20, verts[0], verts[3]);
-    add_edge(&mut graph,1, verts[0], verts[2]);
-    add_edge(&mut graph,2, verts[3], verts[1]);
-   
+    add_edge(&mut graph, 5, verts[0], verts[1]);
+    add_edge(&mut graph, 10, verts[2], verts[1]);
+    add_edge(&mut graph, 15, verts[2], verts[3]);
+    add_edge(&mut graph, 20, verts[0], verts[3]);
+    add_edge(&mut graph, 1, verts[0], verts[2]);
+    add_edge(&mut graph, 2, verts[3], verts[1]);
 
     let wt = kruskal::doit(&verts, &graph);
 
@@ -159,18 +159,15 @@ fn test_union_find_detect_cycle() {
     add_graph_edge(&mut graph, verts[2], verts[3]);
     add_graph_edge(&mut graph, verts[0], verts[3]);
 
-
-    let hascycle = example::union_find_detect_cycle::doit(
-        &verts, &graph);
+    let hascycle = example::union_find_detect_cycle::doit(&verts, &graph);
 
     if hascycle {
         println!("it does have a cycle")
+    } else {
+        print!("it does NOT have a cycle.");
     }
-        else{
-            print!("it does NOT have a cycle.");
-        }
-
 }
+
 
 fn main() {
     println!("testing conn comps-----------");
@@ -184,6 +181,9 @@ fn main() {
 
     println!("testing cycle detect");
     test_union_find_detect_cycle();
+
+    println!("testing partition generator");
+    partition_generator::doit(3,7);
 }
 
 #[cfg(test)]
