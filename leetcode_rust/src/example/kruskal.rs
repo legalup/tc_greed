@@ -121,5 +121,5 @@ pub fn doit(verts: &[Vert], graph: &WeightedGraph) -> u32 {
         }
     }
 
-    return mst_wt;
+    return mst_wt as u32;
 }

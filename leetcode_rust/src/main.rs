@@ -2,15 +2,16 @@
 use example::conn_comps_undirected_graph;
 use example::kruskal;
 use example::partition_generator;
+use example::shortest_path_iterative_dag;
 use example::topsort_dfs_dag;
 use example::union_find_detect_cycle;
 use std::collections::{HashMap, HashSet};
 mod example;
 
 type Graph = HashMap<Vert, HashSet<Vert>>;
-type WeightedGraph = HashMap<Vert, HashSet<(Vert, u32)>>;
+type WeightedGraph = HashMap<Vert, HashSet<(Vert, i32)>>;
 
-fn add_edge(graph: &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
+fn add_weighted_edge(graph: &mut WeightedGraph, wt: i32, v1: Vert, v2: Vert) {
     graph.entry(v1).and_modify(|hs| {
         hs.insert((v2, wt));
     });
@@ -20,13 +21,19 @@ fn add_edge(graph: &mut WeightedGraph, wt: u32, v1: Vert, v2: Vert) {
     });
 }
 
-fn add_graph_edge(graph: &mut Graph, v1: Vert, v2: Vert) {
+fn add_edge(graph: &mut Graph, v1: Vert, v2: Vert) {
     graph.entry(v1).and_modify(|hs| {
         hs.insert(v2);
     });
 
     graph.entry(v2).and_modify(|hs| {
         hs.insert(v1);
+    });
+}
+
+fn add_directed_weighted_edge(graph: &mut WeightedGraph, wt: i32, v1: Vert, v2: Vert) {
+    graph.entry(v1).and_modify(|hs| {
+        hs.insert((v2, wt));
     });
 }
 
@@ -130,12 +137,12 @@ fn test_kruskal() {
         graph.insert(vv, HashSet::with_capacity(un));
     }
 
-    add_edge(&mut graph, 5, verts[0], verts[1]);
-    add_edge(&mut graph, 10, verts[2], verts[1]);
-    add_edge(&mut graph, 15, verts[2], verts[3]);
-    add_edge(&mut graph, 20, verts[0], verts[3]);
-    add_edge(&mut graph, 1, verts[0], verts[2]);
-    add_edge(&mut graph, 2, verts[3], verts[1]);
+    add_weighted_edge(&mut graph, 5, verts[0], verts[1]);
+    add_weighted_edge(&mut graph, 10, verts[2], verts[1]);
+    add_weighted_edge(&mut graph, 15, verts[2], verts[3]);
+    add_weighted_edge(&mut graph, 20, verts[0], verts[3]);
+    add_weighted_edge(&mut graph, 1, verts[0], verts[2]);
+    add_weighted_edge(&mut graph, 2, verts[3], verts[1]);
 
     let wt = kruskal::doit(&verts, &graph);
 
@@ -154,12 +161,12 @@ fn test_union_find_detect_cycle() {
         graph.insert(vv, HashSet::with_capacity(un));
     }
 
-    add_graph_edge(&mut graph, verts[0], verts[1]);
-    add_graph_edge(&mut graph, verts[2], verts[1]);
-    add_graph_edge(&mut graph, verts[2], verts[3]);
-    add_graph_edge(&mut graph, verts[0], verts[3]);
+    add_edge(&mut graph, verts[0], verts[1]);
+    add_edge(&mut graph, verts[2], verts[1]);
+    add_edge(&mut graph, verts[2], verts[3]);
+    add_edge(&mut graph, verts[0], verts[3]);
 
-    let hascycle = example::union_find_detect_cycle::doit(&verts, &graph);
+    let hascycle = union_find_detect_cycle::doit(&verts, &graph);
 
     if hascycle {
         println!("it does have a cycle")
@@ -168,6 +175,32 @@ fn test_union_find_detect_cycle() {
     }
 }
 
+fn test_shortest_path_iterative_dag() {
+    let n: i32 = 6;
+    let un = n as usize;
+    let mut verts: Vec<Vert> = Vec::with_capacity(un);
+    let mut graph: WeightedGraph = HashMap::with_capacity(un);
+
+    for i in 0..n {
+        let vv = Vert { val: i };
+        verts.push(vv);
+        graph.insert(vv, HashSet::with_capacity(un));
+    }
+
+    add_directed_weighted_edge(&mut graph, 5, verts[0], verts[1]);
+    add_directed_weighted_edge(&mut graph, 3, verts[0], verts[2]);
+    add_directed_weighted_edge(&mut graph, 6, verts[1], verts[3]);
+    add_directed_weighted_edge(&mut graph, 2, verts[1], verts[2]);
+    add_directed_weighted_edge(&mut graph, 4, verts[2], verts[4]);
+    add_directed_weighted_edge(&mut graph, 2, verts[2], verts[5]);
+    add_directed_weighted_edge(&mut graph, 7, verts[2], verts[3]);
+    add_directed_weighted_edge(&mut graph, -1, verts[3], verts[4]);
+    add_directed_weighted_edge(&mut graph, -2, verts[4], verts[5]);
+
+    let poopy = shortest_path_iterative_dag::doit(&verts, &graph, verts[1]);
+
+    println!("here is poopy {:?}", poopy);
+}
 
 fn main() {
     println!("testing conn comps-----------");
@@ -183,7 +216,10 @@ fn main() {
     test_union_find_detect_cycle();
 
     println!("testing partition generator");
-    partition_generator::doit(3,7);
+    partition_generator::doit(3, 7);
+
+    println!("testing shortest path");
+    test_shortest_path_iterative_dag();
 }
 
 #[cfg(test)]

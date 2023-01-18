@@ -66,7 +66,7 @@ impl partition_generator_1 {
 }
 
 //class that generates all ways of putting k or less things into n buckets
-struct partition_generator_2 { 
+struct partition_generator_2 {
     numbuckets: i32,
     numobjs: i32,
     curr_numobjs: i32,
@@ -95,7 +95,10 @@ impl partition_generator_2 {
         self.curr_numobjs -= 1;
 
         if self.curr_numobjs > 0 {
-            self.pg1 = Box::new(partition_generator_1::new(self.curr_numobjs, self.numbuckets));
+            self.pg1 = Box::new(partition_generator_1::new(
+                self.curr_numobjs,
+                self.numbuckets,
+            ));
             return self.pg1.next();
         } else {
             self.is_done = true;
@@ -109,8 +112,7 @@ impl partition_generator_2 {
 }
 
 pub fn doit(numobjs: i32, numbuckets: i32) {
-    let mut pg1= partition_generator_2::new(numobjs, numbuckets);
-    
+    let mut pg1 = partition_generator_2::new(numobjs, numbuckets);
 
     while !pg1.is_done {
         println!("{:?}", pg1.next());
