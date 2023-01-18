@@ -3,6 +3,7 @@ use example::conn_comps_undirected_graph;
 use example::kruskal;
 use example::partition_generator;
 use example::shortest_path_iterative_dag;
+use example::shortest_path_recursive_dag;
 use example::topsort_dfs_dag;
 use example::union_find_detect_cycle;
 use std::collections::{HashMap, HashSet};
@@ -202,6 +203,35 @@ fn test_shortest_path_iterative_dag() {
     println!("here is poopy {:?}", poopy);
 }
 
+fn test_shortest_path_recursive_dag() {
+    let n: i32 = 6;
+    let un = n as usize;
+    let mut verts: Vec<Vert> = Vec::with_capacity(un);
+    let mut graph: WeightedGraph = HashMap::with_capacity(un);
+
+    for i in 0..n {
+        let vv = Vert { val: i };
+        verts.push(vv);
+        graph.insert(vv, HashSet::with_capacity(un));
+    }
+
+    add_directed_weighted_edge(&mut graph, 5, verts[0], verts[1]);
+    add_directed_weighted_edge(&mut graph, 3, verts[0], verts[2]);
+    add_directed_weighted_edge(&mut graph, 6, verts[1], verts[3]);
+    add_directed_weighted_edge(&mut graph, 2, verts[1], verts[2]);
+    add_directed_weighted_edge(&mut graph, 4, verts[2], verts[4]);
+    add_directed_weighted_edge(&mut graph, 2, verts[2], verts[5]);
+    add_directed_weighted_edge(&mut graph, 7, verts[2], verts[3]);
+    add_directed_weighted_edge(&mut graph, -1, verts[3], verts[4]);
+    add_directed_weighted_edge(&mut graph, -2, verts[4], verts[5]);
+
+    for i in 0..un{
+        let poopy = shortest_path_recursive_dag::doit(&verts, &graph, verts[i]);
+        println!("short path from 1 to {} is {}", i, poopy);
+    }
+    
+
+}
 fn main() {
     println!("testing conn comps-----------");
     test_conn_comps_undirected_graph();
@@ -218,8 +248,11 @@ fn main() {
     println!("testing partition generator");
     partition_generator::doit(3, 7);
 
-    println!("testing shortest path");
+    println!("testing shortest path iterative");
     test_shortest_path_iterative_dag();
+
+    println!("testing shortest path recursive");
+    test_shortest_path_recursive_dag();
 }
 
 #[cfg(test)]
