@@ -4,8 +4,10 @@ use example::kruskal;
 use example::partition_generator;
 use example::shortest_path_iterative_dag;
 use example::shortest_path_recursive_dag;
+use example::sparse_vector::SparseVector;
 use example::topsort_dfs_dag;
 use example::union_find_detect_cycle;
+use example::sparse_vector;
 use std::collections::{HashMap, HashSet};
 mod example;
 
@@ -232,6 +234,20 @@ fn test_shortest_path_recursive_dag() {
     
 
 }
+
+fn test_sparse_vector(){
+
+    let testvec = vec![1,2,3,4,5,6,7,8,9];
+
+    let mut sv1= SparseVector::from_vec(testvec);
+    let mut sv2 = SparseVector::new();  
+
+    sv2.keys.insert(2);
+    sv2.ns.insert(2,100);
+
+    println!("here is the innerproduct {}", sv1.dot_product(&mut sv2));
+
+}   
 fn main() {
     println!("testing conn comps-----------");
     test_conn_comps_undirected_graph();
@@ -253,6 +269,9 @@ fn main() {
 
     println!("testing shortest path recursive");
     test_shortest_path_recursive_dag();
+
+    println!("testing sparse vector");
+    test_sparse_vector();
 }
 
 #[cfg(test)]
