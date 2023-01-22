@@ -1,102 +1,72 @@
-#![allow(unused)]
-use std::env;
-use std::fmt;
-use std::fmt::{Debug, Display};
-use std::fs::File;
-use std::io::stdin;
-use std::io::{BufRead, BufReader};
-use std::str::{from_utf8_unchecked, FromStr};
+#[allow(unused_imports)]
+use std::io::{stdin, stdout, BufWriter, Write};
+use std::{
+    cell::{Cell, RefCell, UnsafeCell},
+    cmp::{max, min, Ordering, Reverse},
+    collections::{
+        hash_map::{DefaultHasher, RandomState},
+        BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque,
+    },
+};
 
-pub fn main() {
-    //get command line args
-    let args: Vec<String> = env::args().collect();
+const MOD: usize = 1_000_000_007;
+// love this line:
+// let mut a: Vec<usize> = (0..n).map(|_| scan.next()).collect();
+pub fn printv<T: std::fmt::Display>(myvec: Vec<T>) {
+    myvec.iter().for_each(|vv| print!("{vv} "));
+}
+pub fn printvd<T: std::fmt::Display>(myvec: VecDeque<T>) {
+    myvec.iter().for_each(|vv| print!("{vv} "));
+}
 
-    let mut lines = if (args.len() > 1 && &args[1] == "t") {
-        get_lines_from_file()
-    } else {
-        get_lines_from_stdio()
-    };
-
-    let test_cases = int_from_str(&lines[0]);
-    println!("here is test cases {}", test_cases);
-    let mut tc: i32 = 0;
-    let mut idx: i32 = 0;
-    while tc < test_cases {
-        idx = tc * 3 + 2;
-        let mut line = &lines[idx as usize];
-
-        let mut n_numbers = vec_from_str(line).unwrap();
-        line = &lines[(idx + 1) as usize];
-
-        let mut m_numbers = vec_from_str(line).unwrap();
-        for num in m_numbers {
-            place_where_small_found(&mut n_numbers, num);
+#[derive(Default)]
+struct Scanner {
+    buffer: Vec<String>,
+}
+impl Scanner {
+    fn next<T: std::str::FromStr>(&mut self) -> T {
+        loop {
+            if let Some(token) = self.buffer.pop() {
+                return token.parse().ok().expect("Failed parse");
+            }
+            let mut input = String::new();
+            stdin().read_line(&mut input).expect("Failed read");
+            self.buffer = input.split_whitespace().rev().map(String::from).collect();
         }
-        println!("{}", n_numbers.iter().sum::<i64>());
-        tc += 1;
     }
 }
 
-pub fn place_where_small_found(numbers: &mut [i64], target: i64) {
-    let small = numbers.iter().min().unwrap();
-    let index = numbers.iter().position(|&x| x == *small).unwrap();
-    numbers[index] = target;
-}
+fn main() {
+    let mut scan = Scanner::default();
+    let out = &mut BufWriter::new(stdout());
 
-pub fn get_int_input_stdio() -> i32 {
-    let mut line = String::new();
-    stdin().read_line(&mut line).unwrap();
-    line.trim().parse::<i32>().unwrap()
-}
+    let t = scan.next::<usize>();
 
-pub fn get_line_input_stdio() -> String {
-    let mut line = String::new();
-    stdin().read_line(&mut line).unwrap();
-    line.trim().to_string()
-}
+    for _ in 0..t {
+        let n = scan.next::<usize>();
+        let mut a: Vec<usize> = (0..n).map(|_| scan.next()).collect();
 
-pub fn int_from_str(line: &str) -> i32 {
-    line.trim().parse::<i32>().unwrap()
-}
+        a.sort();
 
-pub fn vec_from_str<T: FromStr>(line: &str) -> Option<Vec<T>>
-where
-    <T as FromStr>::Err: Debug,
-{
-    line.split_ascii_whitespace()
-        .map(|v| v.parse::<T>())
-        .fold(Ok(Vec::new()), |vals, v| {
-            vals.map(|mut vals| {
-                v.map(|v| {
-                    vals.push(v);
-                    vals
-                })
-            })?
-        })
-        .map_err(|e| format!("can't parse data: {:?}", e))
-        .ok()
-}
+        let mut b = VecDeque::with_capacity(n);
+        b.push_front(*a.last().unwrap());
+        let mut sum = b[0];
+        let mut fail = false;
+        for i in 0..n - 1 {
+            if a[i] == sum {
+                fail = true;
+                //println!("ai : {} and sum {}", a[i], sum);
+            }
+            b.push_back(a[i]);
+            sum += a[i];
+        }
 
-pub fn get_lines_from_file() -> Vec<String> {
-    let f = File::open("data.txt").expect("Unable to open file");
-    let f = BufReader::new(f);
+        if fail {
+            println!("NO");
+            continue;
+        }
+        println!("YES");
 
-    let mut ret: Vec<String> = Vec::new();
-
-    for line in f.lines() {
-        let line = line.expect("Unable to read line");
-        ret.push(line);
+        printvd(b);
     }
-
-    ret
-}
-pub fn get_lines_from_stdio() -> Vec<String> {
-    let test_cases: usize = get_int_input_stdio() as usize;
-    let mut ret: Vec<String> = Vec::with_capacity(test_cases);
-
-    for _ in 0..test_cases {
-        ret.push(get_line_input_stdio());
-    }
-
-    ret
 }
