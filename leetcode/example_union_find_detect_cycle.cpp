@@ -1,5 +1,6 @@
-// C++ program to print connected components in
-// an undirected graph
+// C++ program to find cycles in
+// an undirected graph.
+// this does not work for directed graphs
 
 
 #include <iostream>
