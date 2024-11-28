@@ -32,16 +32,51 @@ impl Scanner {
     }
 }
 
+pub fn doit(n : i32){
+    for i in 0..n {
+        print!("{} ",1+2*i);
+    }
+    println!("");
+}
+
 fn main()-> io::Result<()> {
 
     let args: Vec<String> = env::args().collect();
     dbg!(&args);
 
+    /* 
     let file = File::open(&args[1])?;
     let reader = BufReader::new(file);
+    */
 
-    for line in reader.lines() {
-        println!("{}", line?);
+    //for &line in reader.lines() {
+    //    println!("{}", line?);
+    //}
+    
+
+    /* 
+    let mut inputs: Vec<i32> = Vec::new();
+    for line in reader.lines(){
+        match line {
+            Ok(ss) => inputs.push(ss.parse::<i32>().unwrap()),
+            _ => println!("got nutting honey") 
+        }
+
+    }
+    */
+
+    let mut scan = Scanner::default();
+    let n : usize = scan.next();
+
+    
+    let mut inputs: Vec<usize> = (0..n).map(|_| scan.next()).collect();
+    
+
+    //println!("the inputs are {:?}", inputs);
+    //let t = inputs[0];
+
+    for nn in 0..inputs.len(){
+        doit(inputs[nn] as i32);
     }
     /* 
     let mut scan = Scanner::default();
