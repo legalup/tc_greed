@@ -1,5 +1,7 @@
 #[allow(unused_imports)]
-use std::io::{stdin, stdout, BufWriter, Write};
+use std::io::{self,stdin, stdout, BufWriter, Write,prelude::*, BufReader, Result};
+use std::fs::File;
+use std::env;
 use std::{
     cell::{Cell, RefCell, UnsafeCell},
     cmp::{max, min, Ordering, Reverse},
@@ -12,12 +14,6 @@ use std::{
 const MOD: usize = 1_000_000_007;
 // love this line:
 // let mut a: Vec<usize> = (0..n).map(|_| scan.next()).collect();
-pub fn printv<T: std::fmt::Display>(myvec: Vec<T>) {
-    myvec.iter().for_each(|vv| print!("{vv} "));
-}
-pub fn printvd<T: std::fmt::Display>(myvec: VecDeque<T>) {
-    myvec.iter().for_each(|vv| print!("{vv} "));
-}
 
 #[derive(Default)]
 struct Scanner {
@@ -36,7 +32,18 @@ impl Scanner {
     }
 }
 
-fn main() {
+fn main()-> io::Result<()> {
+
+    let args: Vec<String> = env::args().collect();
+    dbg!(&args);
+
+    let file = File::open(&args[1])?;
+    let reader = BufReader::new(file);
+
+    for line in reader.lines() {
+        println!("{}", line?);
+    }
+    /* 
     let mut scan = Scanner::default();
     let out = &mut BufWriter::new(stdout());
 
@@ -67,6 +74,8 @@ fn main() {
         }
         println!("YES");
 
-        printvd(b);
+        println!("here is b {:?}",b);
     }
+    */
+    Ok(())
 }
