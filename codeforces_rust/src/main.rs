@@ -44,6 +44,10 @@ fn main()-> io::Result<()> {
     let args: Vec<String> = env::args().collect();
     dbg!(&args);
 
+    /////////////////////////////
+    /// use this when you are working on problem at home
+    /// TODO: not sure if this reads whole file at a time or not
+    ///////////////////////////// 
     /* 
     let file = File::open(&args[1])?;
     let reader = BufReader::new(file);
@@ -54,17 +58,10 @@ fn main()-> io::Result<()> {
     //}
     
 
-    /* 
-    let mut inputs: Vec<i32> = Vec::new();
-    for line in reader.lines(){
-        match line {
-            Ok(ss) => inputs.push(ss.parse::<i32>().unwrap()),
-            _ => println!("got nutting honey") 
-        }
-
-    }
-    */
-
+    //////////////////////////
+    /// OR use this when you are about to submit
+    /// this reads what is passed in to running executable
+    //////////////////////////
     let mut scan = Scanner::default();
     let n : usize = scan.next();
 
@@ -75,6 +72,16 @@ fn main()-> io::Result<()> {
     //println!("the inputs are {:?}", inputs);
     //let t = inputs[0];
 
+     /* 
+    let mut inputs: Vec<i32> = Vec::new();
+    for line in reader.lines(){
+        match line {
+            Ok(ss) => inputs.push(ss.parse::<i32>().unwrap()),
+            _ => println!("got nutting honey") 
+        }
+
+    }
+    */
     for nn in 0..inputs.len(){
         doit(inputs[nn] as i32);
     }
